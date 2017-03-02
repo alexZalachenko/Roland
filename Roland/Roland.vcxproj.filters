@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Archivos de código fuente">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Archivos de encabezado">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Archivos de recursos">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Archivos de código fuente\OpenGL">
+      <UniqueIdentifier>{6726d8f2-6c88-4497-a6ed-94457fabb987}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\OpenGL">
+      <UniqueIdentifier>{aeaaa810-06af-4410-8cd0-ed5d24058a00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Roland">
+      <UniqueIdentifier>{2fd7351f-99a5-4a70-897d-617f18c37a05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Others">
+      <UniqueIdentifier>{1adef9a8-6dbd-40ef-a4ba-d28684564bba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\OpenGL\Shaders">
+      <UniqueIdentifier>{5bec0c00-ae72-4912-8129-336e083d3602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de código fuente\Roland">
+      <UniqueIdentifier>{f37a77ef-f02a-4718-81c8-fb798bdb333e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Roland\SceneTree">
+      <UniqueIdentifier>{c718f427-2936-414f-9aae-7a5eb8b884f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de código fuente\Roland\SceneTree">
+      <UniqueIdentifier>{1a0ba172-887a-48cf-8f4d-3c4181522e49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de código fuente\Roland\ResourcesManager">
+      <UniqueIdentifier>{6180bb70-51a0-4821-bceb-c7200fd3d5d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Roland\ResourcesManager">
+      <UniqueIdentifier>{7cc6bfb3-95e0-4d03-a5da-eeef0a65a5a1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGLEngine.cpp">
+      <Filter>Archivos de código fuente\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexShader.txt">
+      <Filter>Archivos de encabezado\OpenGL\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="FragmentShader.txt">
+      <Filter>Archivos de encabezado\OpenGL\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Roland.cpp">
+      <Filter>Archivos de código fuente\Roland</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix4x4.cpp">
+      <Filter>Archivos de código fuente\Roland\SceneTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Archivos de código fuente\Roland\SceneTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Archivos de código fuente\Roland\SceneTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>Archivos de código fuente\Roland\SceneTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Archivos de código fuente\Roland\SceneTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Archivos de código fuente\Roland\SceneTree</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourcesManager.cpp">
+      <Filter>Archivos de código fuente\Roland\ResourcesManager</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshResource.cpp">
+      <Filter>Archivos de código fuente\Roland\ResourcesManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource.cpp">
+      <Filter>Archivos de código fuente\Roland\ResourcesManager</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="OpenGLEngine.h">
+      <Filter>Archivos de encabezado\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Roland.h">
+      <Filter>Archivos de encabezado\Roland</Filter>
+    </ClInclude>
+    <ClInclude Include="RolandUtilities.h">
+      <Filter>Archivos de encabezado\Roland</Filter>
+    </ClInclude>
+    <ClInclude Include="CallbackFunctions.h">
+      <Filter>Archivos de encabezado\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="IGraphicEngine.h">
+      <Filter>Archivos de encabezado\Roland</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Archivos de encabezado\Roland\SceneTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Archivos de encabezado\Roland\SceneTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix4x4.h">
+      <Filter>Archivos de encabezado\Roland\SceneTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Archivos de encabezado\Roland\SceneTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Archivos de encabezado\Roland\SceneTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Archivos de encabezado\Roland\SceneTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Archivos de encabezado\Roland\SceneTree</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourcesManager.h">
+      <Filter>Archivos de encabezado\Roland\ResourcesManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Archivos de encabezado\Roland\ResourcesManager</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshResource.h">
+      <Filter>Archivos de encabezado\Roland\ResourcesManager</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
