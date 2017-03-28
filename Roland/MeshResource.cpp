@@ -1,19 +1,19 @@
 #include "MeshResource.h"
+#include "MeshData.h"
 
 MeshResource::MeshResource()
 {
+	c_vertices = std::vector<Vertex>();
 }
 
 MeshResource::~MeshResource()
 {
-}
-
-void MeshResource::LoadFile(std::string p_name)
-{
-	//TODO
+	if (c_meshData != nullptr)
+		delete c_meshData;
 }
 
 void MeshResource::Draw()
 {
-	//TODO
+	if (c_meshData != nullptr)
+		c_meshData->Draw();
 }

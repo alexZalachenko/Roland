@@ -1,5 +1,5 @@
 #pragma once
-#include "Entity.h"
+#include "IEntity.h"
 
 struct Color
 {
@@ -41,7 +41,7 @@ struct Color
 	}
 };
 
-class Light : public Entity
+class Light : public IEntity
 {
 public:
 	Light();

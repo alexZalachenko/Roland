@@ -1,7 +1,7 @@
 #pragma once
-#include "Entity.h"
+#include "IEntity.h"
 
-class Camera : public Entity
+class Camera : public IEntity
 {
 public:
 	Camera();

@@ -9,9 +9,9 @@ Transform::~Transform()
 {
 }
 
-void Transform::Identity()
+void Transform::IdIEntity()
 {
-	c_matrix.SetIdentity();
+	c_matrix.SetIdIEntity();
 }
 	 
 void Transform::LoadMatrix(Matrix4x4<double> p_matrix)

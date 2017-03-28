@@ -7,16 +7,14 @@ Mesh::Mesh()
 
 Mesh::~Mesh()
 {
-}
-
-void Mesh::LoadMesh(std::string p_file)
-{
-
+	if (c_meshResource != nullptr)
+		delete c_meshResource;
 }
 
 void Mesh::BeginDraw()
 {
-	c_mesh->Draw();
+	if (c_meshResource != nullptr)
+		c_meshResource->Draw();
 }
 
 void Mesh::EndDraw()

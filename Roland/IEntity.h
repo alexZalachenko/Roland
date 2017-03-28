@@ -1,5 +1,5 @@
 #pragma once
-class Entity
+class IEntity
 {
 public:
 	virtual void BeginDraw() = 0;

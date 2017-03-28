@@ -1,17 +1,17 @@
 #pragma once
-#include "Entity.h"
-#include <string>
+#include "IEntity.h"
 class MeshResource;
 
-class Mesh : public Entity
+class Mesh : public IEntity
 {
 public:
 	Mesh();
 	~Mesh();
+	void SetMeshResource(MeshResource* p_meshResource) { c_meshResource = p_meshResource; }
+	MeshResource* GetMeshResource() { return c_meshResource; }
 
 private:
-	MeshResource* c_mesh;
-	void LoadMesh(std::string p_file);
+	MeshResource* c_meshResource;
 	void BeginDraw();
 	void EndDraw();
 };

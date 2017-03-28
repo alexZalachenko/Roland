@@ -54,14 +54,8 @@
     <ClCompile Include="VertexShader.txt">
       <Filter>Archivos de encabezado\OpenGL\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="FragmentShader.txt">
-      <Filter>Archivos de encabezado\OpenGL\Shaders</Filter>
-    </ClCompile>
     <ClCompile Include="Roland.cpp">
       <Filter>Archivos de código fuente\Roland</Filter>
-    </ClCompile>
-    <ClCompile Include="Matrix4x4.cpp">
-      <Filter>Archivos de código fuente\Roland\SceneTree</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Archivos de código fuente\Roland\SceneTree</Filter>
@@ -87,6 +81,12 @@
     <ClCompile Include="Resource.cpp">
       <Filter>Archivos de código fuente\Roland\ResourcesManager</Filter>
     </ClCompile>
+    <ClCompile Include="FragmentShader.txt">
+      <Filter>Archivos de encabezado\OpenGL\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshOpenGLData.cpp">
+      <Filter>Archivos de código fuente\OpenGL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGLEngine.h">
@@ -103,9 +103,6 @@
     </ClInclude>
     <ClInclude Include="IGraphicEngine.h">
       <Filter>Archivos de encabezado\Roland</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Archivos de encabezado\Roland\SceneTree</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>Archivos de encabezado\Roland\SceneTree</Filter>
@@ -134,5 +131,17 @@
     <ClInclude Include="MeshResource.h">
       <Filter>Archivos de encabezado\Roland\ResourcesManager</Filter>
     </ClInclude>
+    <ClInclude Include="IEntity.h">
+      <Filter>Archivos de encabezado\Roland\SceneTree</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshData.h">
+      <Filter>Archivos de encabezado\Roland\ResourcesManager</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshOpenGLData.h">
+      <Filter>Archivos de encabezado\OpenGL</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
