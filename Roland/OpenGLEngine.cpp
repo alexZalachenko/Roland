@@ -1,8 +1,8 @@
 #include "OpenGLEngine.h"
 #include <GLFW/glfw3.h>//for creating a window and reading users' input
 #include <iostream>
-#include "CallbackFunctions.h"
 #include <fstream>
+#include "CallbackFunctions.h"
 #include "Node.h"
 #include "IEntity.h"
 #include "IGraphicEngine.h"
@@ -10,8 +10,11 @@
 #include "Camera.h"
 #include "Light.h"
 #include "Mesh.h"
-#include "MeshResource.h"
+#include "IMeshResource.h"
+#include "IImageResource.h"
 #include "ResourcesManager.h"
+#include "Image.h"
+#include <regex>
 
 OpenGLEngine::OpenGLEngine()
 	: c_window(nullptr),
@@ -28,24 +31,22 @@ OpenGLEngine::~OpenGLEngine()
 	Terminate();
 }
 
-			/*Methods related to engine's configuration*/
-void		OpenGLEngine::SetupEngine(Rol::WindowData p_windowData)
+				/*Methods related to engine's configuration*/
+void			OpenGLEngine::SetupEngine(Rol::WindowData p_windowData)
 {
 	Init();
 	CreateWindow(p_windowData);
 	InitGlew();
 	InitCallbacks();
-	c_shaderProgram = glCreateProgram();
-	LinkShader(CompileShader("VertexShader.txt", GL_VERTEX_SHADER));
-	LinkShader(CompileShader("FragmentShader.txt", GL_FRAGMENT_SHADER));
+	glUseProgram(c_shadersManager.CreateProgram("VertexShader.txt", "FragmentShader.txt", "program01"));
 }
 
-void		OpenGLEngine::Terminate()
+void			OpenGLEngine::Terminate()
 {
 	glfwTerminate();
 }
 
-void		OpenGLEngine::Init()
+void			OpenGLEngine::Init()
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -53,7 +54,7 @@ void		OpenGLEngine::Init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
 
-void		OpenGLEngine::CreateWindow(Rol::WindowData p_windowData)
+void			OpenGLEngine::CreateWindow(Rol::WindowData p_windowData)
 {
 	p_windowData.c_resizable ? glfwWindowHint(GLFW_RESIZABLE, GL_TRUE) : glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	if (p_windowData.c_fullscreen)
@@ -77,7 +78,7 @@ void		OpenGLEngine::CreateWindow(Rol::WindowData p_windowData)
 	glViewport(0, 0, t_width, t_height);
 }
 
-void		OpenGLEngine::InitGlew()
+void			OpenGLEngine::InitGlew()
 {
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK)
@@ -87,60 +88,12 @@ void		OpenGLEngine::InitGlew()
 	}
 }
 
-void		OpenGLEngine::InitCallbacks()
+void			OpenGLEngine::InitCallbacks()
 {
 	glfwSetKeyCallback(c_window, OpenGLCallbacks::key_callback);
 }
 
-GLuint		OpenGLEngine::CompileShader(const GLchar* p_shaderFile, unsigned short p_shaderType)
-{
-	//read the shader from the specified file
-	std::string t_shaderCode;
-	std::ifstream t_shaderStream(p_shaderFile, std::ios::in);
-	if (t_shaderStream.is_open()){
-		std::string Line = "";
-		while (getline(t_shaderStream, Line))
-			t_shaderCode += "\n" + Line;
-		t_shaderStream.close();
-	}
-	else{
-		std::cout << "Impossible to open " << p_shaderFile << std::endl;
-		exit(-1);
-	}
-
-	char const * t_shaderCodeConverted = t_shaderCode.c_str();
-	GLuint r_shaderID = glCreateShader(p_shaderType);//create a empty shader of the passed type
-	glShaderSource(r_shaderID, 1, &t_shaderCodeConverted, NULL);//set the source code to the created shader
-	glCompileShader(r_shaderID);
-	// Check for compile time errors
-	GLint t_success;
-	GLchar t_infoLog[512];
-	glGetShaderiv(r_shaderID, GL_COMPILE_STATUS, &t_success);//set the shader to be queried and what to query about. Store the result code
-	if (!t_success)
-	{
-		glGetShaderInfoLog(r_shaderID, 512, NULL, t_infoLog);//store the query info in t_infoLog
-		std::cout << "ERROR COMPILING SHADER " << p_shaderFile << " COMPILATION_FAILED\n" << t_infoLog << std::endl;
-		exit(-1);
-	}
-	return r_shaderID;
-}
-
-void		OpenGLEngine::LinkShader(GLuint p_shader)
-{
-	glAttachShader(c_shaderProgram, p_shader);
-	glLinkProgram(c_shaderProgram);
-	GLint t_success;
-	GLchar t_infoLog[512];
-	glGetProgramiv(c_shaderProgram, GL_LINK_STATUS, &t_success);
-	if (!t_success) {
-		glGetProgramInfoLog(c_shaderProgram, 512, NULL, t_infoLog);
-		std::cout << "ERROR LINKING SHADER. LINKING_FAILED\n" << t_infoLog << std::endl;
-		exit(-1);
-	}
-	glDeleteShader(p_shader);
-}
-
-void		OpenGLEngine::StartLoop()
+void			OpenGLEngine::StartLoop()
 {
 	while (!glfwWindowShouldClose(c_window))
 	{
@@ -151,9 +104,6 @@ void		OpenGLEngine::StartLoop()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		//use vertex shader
-		glUseProgram(c_shaderProgram);
-
 		//draw the scene tree
 		Draw();
 
@@ -162,68 +112,108 @@ void		OpenGLEngine::StartLoop()
 	}
 }
 
-			/*Methods related to engine's client functionality*/
-Node*		OpenGLEngine::CreateNode(Node* p_father, IEntity* p_IEntity)
+				/*Methods related to engine's functionality*/
+Node*			OpenGLEngine::CreateNode(Node* p_father, IEntity* p_IEntity)
 {
 	Node* t_newNode = new Node(p_father, p_IEntity);
 	return t_newNode;
 }
 
-Node*		OpenGLEngine::CreateNode()
+Node*			OpenGLEngine::CreateNode()
 {
 	Node* t_newNode = new Node();
 	return t_newNode;
 }
 
-Transform*	OpenGLEngine::CreateTransform()
+Transform*		OpenGLEngine::CreateTransform()
 {
 	Transform* t_newTransform = new Transform;
 	return t_newTransform;
 }
 
-Camera*		OpenGLEngine::CreateCamera()
+Camera*			OpenGLEngine::CreateCamera()
 {
 	//TODO
 	return nullptr;
 }
 
-Light*		OpenGLEngine::CreateLight()
+Light*			OpenGLEngine::CreateLight()
 {
 	//TODO
 	Light* t_newLight = new Light;
 	return t_newLight;
 }
 
-Mesh*		OpenGLEngine::CreateMesh(std::string p_file)
+Mesh*			OpenGLEngine::CreateMesh(std::string p_file)
 {
+	if (!std::regex_match(p_file, std::regex{ R"(.*\.(obj|3ds|FBX|blend)$)" }))
+	{
+		std::cout << "Mesh format not supported" << std::endl;
+		exit(-1);
+	}
+
 	Mesh* r_newMesh = new Mesh;
 	//get the resource from the resources manager
-	Resource* t_resource = c_resourcesManager.GetResource(p_file);
+	IResource* t_resource = c_resourcesManager.GetResource(p_file);
 	//set it to the new created mesh
 	if (t_resource != nullptr)
-		r_newMesh->SetMeshResource(dynamic_cast<MeshResource*>(t_resource));
+		r_newMesh->SetMeshResource(dynamic_cast<IMeshResource*>(t_resource));
 	return r_newMesh;
 }
 
-/*delete mesh from the resources manager. If the mesh is wanted to use again it will must be loaded*/
-void		OpenGLEngine::DeleteMesh(std::string p_file)
+Mesh * OpenGLEngine::CreateMesh(std::string p_meshFile, std::string p_textureFile)
+{
+	Mesh* t_newMesh = CreateMesh(p_meshFile);
+	if (t_newMesh != nullptr)
+	{
+		Image* t_newImage = CreateImage(p_textureFile);
+		if (t_newImage != nullptr)
+			t_newMesh->GetMeshResource()->SetTexture(t_newImage->GetImageResource());
+	}
+	return t_newMesh;
+}
+
+Image*	OpenGLEngine::CreateImage(std::string p_file)
+{
+	if (!std::regex_match(p_file, std::regex{ R"(.*\.(png|jpg)$)" }))
+	{
+		std::cout << "Image format not supported" << std::endl;
+		exit(-1);
+	}
+
+	Image* r_newImage = new Image;
+	//get the resource from the resources manager
+	IResource* t_resource = c_resourcesManager.GetResource(p_file);
+	//set it to the new created mesh
+	if (t_resource != nullptr)
+		r_newImage->SetImageResource(dynamic_cast<IImageResource*>(t_resource));
+	return r_newImage;
+}
+
+void			OpenGLEngine::DeleteImage(std::string p_file)
 {
 	//TODO
 }
 
-void		OpenGLEngine::RegisterLightNode(Node* p_lightNode)
+				/*delete mesh from the resources manager. If the mesh is wanted again to be used it will must be loaded again*/
+void			OpenGLEngine::DeleteMesh(std::string p_file)
+{
+	//TODO
+}
+
+void			OpenGLEngine::RegisterLightNode(Node* p_lightNode)
 {
 	if (p_lightNode != nullptr)
 		c_lights.push_back(p_lightNode);
 }
 
-void		OpenGLEngine::RegisterCameraNode(Node* p_cameraNode)
+void			OpenGLEngine::RegisterCameraNode(Node* p_cameraNode)
 {
 	if (p_cameraNode != nullptr)
 		c_cameras.push_back(p_cameraNode);
 }
 
-void		OpenGLEngine::Draw()
+void			OpenGLEngine::Draw()
 {
 	//TODO
 	for (size_t t_index = 0; t_index < c_lights.size(); ++t_index)

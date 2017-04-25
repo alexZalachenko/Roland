@@ -1,12 +1,14 @@
 #pragma once
 #include <string>
-class Resource
+class IResource
 {
 public:
-	Resource();
-	virtual ~Resource();
+	IResource();
+	IResource(std::string p_name);
+	virtual ~IResource();
 	std::string GetName();
 	void SetName(std::string p_name);
+	virtual void Display() = 0;
 
 private:
 	std::string c_name;

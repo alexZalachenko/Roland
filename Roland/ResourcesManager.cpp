@@ -1,64 +1,59 @@
 #include "ResourcesManager.h"
-#include "Resource.h"
-#include "MeshResource.h"
-#include "MeshOpenGLData.h"
+#include "ResourcesLoaderOpenGL.h"
+#include "IResource.h"
 #include <iostream>
+#include <regex>
 
 ResourcesManager::ResourcesManager(Rol::RenderEngines p_usedEngine)
 	:c_usedEngine(p_usedEngine)
 {
-	c_resources = std::vector<Resource*>();
+	c_resources = std::vector<IResource*>();
+	switch (c_usedEngine)
+	{
+	case Rol::OpenGL:
+		c_resourcesLoader = new ResourcesLoaderOpenGL();
+		break;
+	case Rol::DirectX:
+		std::cout << "DirectX not implemented yet" << std::endl;
+		break;
+	}
 }
 
 ResourcesManager::~ResourcesManager()
 {
-	for (Resource* t_resource : c_resources)
+	for (IResource* t_resource : c_resources)
 		delete t_resource;
 }
 
-Resource* ResourcesManager::GetResource(std::string p_name)
+IResource* ResourcesManager::GetResource(std::string p_name)
 {
-	for (Resource* t_resource : c_resources)
+	for (IResource* t_resource : c_resources)
 	{
 		if (t_resource->GetName() == p_name)
 			return t_resource;
 	}
 	//the resource is not on the resources inventory. Load it
-	c_resources.push_back(LoadFile(p_name));
-	return c_resources.back();
+	if (LoadFile(p_name) != nullptr)
+		return c_resources.back();
+	else
+		return nullptr;
 }
 
-Resource* ResourcesManager::LoadFile(std::string p_file)
+IResource* ResourcesManager::LoadFile(std::string p_file)
 {
-	//TODO
-	MeshResource* t_newResource = new MeshResource();
-	
-	if (p_file == "fakeMesh")
-	{
-		t_newResource->AddVertex(
-			Vertex(
-				glm::vec3(-0.5f, -0.5f, 0.0f),
-				glm::vec4(1.f, 0.f, 0.f, 1.f)));
-		t_newResource->AddVertex(
-			Vertex(
-				glm::vec3(0.5f, -0.5f, 0.0f),
-				glm::vec4(0.f, 1.f, 0.f, 1.f)));
-		t_newResource->AddVertex(
-			Vertex(
-				glm::vec3(0.0f, 0.5f, 0.0f),
-				glm::vec4(0.f, 0.f, 1.f, 1.f)));
-		t_newResource->SetName("recurso 1");
+	IResource* t_loadedResource = nullptr;
+	//check if the file is an image
+	if (std::regex_match(p_file, std::regex{ R"(.*\.(png|jpg)$)" }))
+		t_loadedResource = c_resourcesLoader->LoadImage(p_file);
+	//check if the file is a mesh
+	else if (std::regex_match(p_file, std::regex{ R"(.*\.(obj|3ds|FBX|blend)$)" }))
+		t_loadedResource = c_resourcesLoader->LoadMesh(p_file);
 
-		switch (c_usedEngine)
-		{
-		case Rol::OpenGL:
-			t_newResource->SetMeshData(new MeshOpenGLData(t_newResource));
-			break;
-		case Rol::DirectX:
-			std::cout << "DirectX not implemented yet" << std::endl;
-			break;
-		}
-	}
-	return t_newResource;
+	//check if the file existed
+	if (t_loadedResource == nullptr)
+		std::cout << "Error. File not found" << std::endl;
+	else
+		c_resources.push_back(t_loadedResource);
+	return t_loadedResource;
 }
 

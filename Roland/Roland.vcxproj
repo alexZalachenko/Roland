@@ -52,7 +52,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32sd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32sd.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -75,16 +75,19 @@
     <ClCompile Include="FragmentShader.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Image.cpp" />
+    <ClCompile Include="ImageResourceOpenGL.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="MeshOpenGLData.cpp" />
-    <ClCompile Include="MeshResource.cpp" />
+    <ClCompile Include="MeshResourceOpenGL.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="OpenGLEngine.cpp" />
-    <ClCompile Include="Resource.cpp" />
+    <ClCompile Include="IResource.cpp" />
+    <ClCompile Include="ResourcesLoaderOpenGL.cpp" />
     <ClCompile Include="ResourcesManager.cpp" />
     <ClCompile Include="Roland.cpp" />
+    <ClCompile Include="ShadersManager.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="VertexShader.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -95,18 +98,23 @@
     <ClInclude Include="IEntity.h" />
     <ClInclude Include="IGraphicEngine.h" />
     <ClInclude Include="CallbackFunctions.h" />
+    <ClInclude Include="Image.h" />
+    <ClInclude Include="IImageResource.h" />
+    <ClInclude Include="ImageResourceOpenGL.h" />
+    <ClInclude Include="IResourcesLoader.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="MeshData.h" />
-    <ClInclude Include="MeshOpenGLData.h" />
-    <ClInclude Include="MeshResource.h" />
+    <ClInclude Include="MeshResourceOpenGL.h" />
+    <ClInclude Include="IMeshResource.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="OpenGLEngine.h" />
-    <ClInclude Include="Resource.h" />
+    <ClInclude Include="IResource.h" />
+    <ClInclude Include="ResourcesLoaderOpenGL.h" />
     <ClInclude Include="ResourcesManager.h" />
     <ClInclude Include="Roland.h" />
     <ClInclude Include="RolandUtilities.h" />
+    <ClInclude Include="ShadersManager.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>

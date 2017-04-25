@@ -25,9 +25,6 @@
     <Filter Include="Archivos de encabezado\Others">
       <UniqueIdentifier>{1adef9a8-6dbd-40ef-a4ba-d28684564bba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de encabezado\OpenGL\Shaders">
-      <UniqueIdentifier>{5bec0c00-ae72-4912-8129-336e083d3602}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Archivos de código fuente\Roland">
       <UniqueIdentifier>{f37a77ef-f02a-4718-81c8-fb798bdb333e}</UniqueIdentifier>
     </Filter>
@@ -43,6 +40,9 @@
     <Filter Include="Archivos de encabezado\Roland\ResourcesManager">
       <UniqueIdentifier>{7cc6bfb3-95e0-4d03-a5da-eeef0a65a5a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de código fuente\OpenGL\Shaders">
+      <UniqueIdentifier>{5bec0c00-ae72-4912-8129-336e083d3602}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -52,7 +52,7 @@
       <Filter>Archivos de código fuente\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="VertexShader.txt">
-      <Filter>Archivos de encabezado\OpenGL\Shaders</Filter>
+      <Filter>Archivos de código fuente\OpenGL\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="Roland.cpp">
       <Filter>Archivos de código fuente\Roland</Filter>
@@ -75,16 +75,25 @@
     <ClCompile Include="ResourcesManager.cpp">
       <Filter>Archivos de código fuente\Roland\ResourcesManager</Filter>
     </ClCompile>
-    <ClCompile Include="MeshResource.cpp">
-      <Filter>Archivos de código fuente\Roland\ResourcesManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource.cpp">
-      <Filter>Archivos de código fuente\Roland\ResourcesManager</Filter>
-    </ClCompile>
     <ClCompile Include="FragmentShader.txt">
-      <Filter>Archivos de encabezado\OpenGL\Shaders</Filter>
+      <Filter>Archivos de código fuente\OpenGL\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="MeshOpenGLData.cpp">
+    <ClCompile Include="IResource.cpp">
+      <Filter>Archivos de código fuente\Roland\ResourcesManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadersManager.cpp">
+      <Filter>Archivos de código fuente\Roland</Filter>
+    </ClCompile>
+    <ClCompile Include="Image.cpp">
+      <Filter>Archivos de código fuente\Roland\SceneTree</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshResourceOpenGL.cpp">
+      <Filter>Archivos de código fuente\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourcesLoaderOpenGL.cpp">
+      <Filter>Archivos de código fuente\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageResourceOpenGL.cpp">
       <Filter>Archivos de código fuente\OpenGL</Filter>
     </ClCompile>
   </ItemGroup>
@@ -125,19 +134,34 @@
     <ClInclude Include="ResourcesManager.h">
       <Filter>Archivos de encabezado\Roland\ResourcesManager</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Archivos de encabezado\Roland\ResourcesManager</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshResource.h">
-      <Filter>Archivos de encabezado\Roland\ResourcesManager</Filter>
-    </ClInclude>
     <ClInclude Include="IEntity.h">
       <Filter>Archivos de encabezado\Roland\SceneTree</Filter>
     </ClInclude>
-    <ClInclude Include="MeshData.h">
+    <ClInclude Include="IResource.h">
       <Filter>Archivos de encabezado\Roland\ResourcesManager</Filter>
     </ClInclude>
-    <ClInclude Include="MeshOpenGLData.h">
+    <ClInclude Include="ShadersManager.h">
+      <Filter>Archivos de encabezado\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Image.h">
+      <Filter>Archivos de encabezado\Roland\SceneTree</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshResourceOpenGL.h">
+      <Filter>Archivos de encabezado\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="IMeshResource.h">
+      <Filter>Archivos de encabezado\Roland\ResourcesManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourcesLoaderOpenGL.h">
+      <Filter>Archivos de encabezado\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="IResourcesLoader.h">
+      <Filter>Archivos de encabezado\Roland\ResourcesManager</Filter>
+    </ClInclude>
+    <ClInclude Include="IImageResource.h">
+      <Filter>Archivos de encabezado\Roland\ResourcesManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageResourceOpenGL.h">
       <Filter>Archivos de encabezado\OpenGL</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,5 +1,6 @@
 #include "Mesh.h"
-#include "MeshResource.h"
+#include "IMeshResource.h"
+#include "Image.h"
 
 Mesh::Mesh()
 {
@@ -14,10 +15,16 @@ Mesh::~Mesh()
 void Mesh::BeginDraw()
 {
 	if (c_meshResource != nullptr)
-		c_meshResource->Draw();
+		c_meshResource->Display();
 }
 
 void Mesh::EndDraw()
 {
 
+}
+
+void Mesh::SetTexture(Image* p_texture)
+{
+	if (c_meshResource != nullptr)
+		c_meshResource->SetTexture(p_texture->GetImageResource());
 }

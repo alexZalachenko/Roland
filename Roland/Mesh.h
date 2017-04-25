@@ -1,17 +1,19 @@
 #pragma once
 #include "IEntity.h"
-class MeshResource;
+class IMeshResource;
+class Image;
 
 class Mesh : public IEntity
 {
 public:
 	Mesh();
 	~Mesh();
-	void SetMeshResource(MeshResource* p_meshResource) { c_meshResource = p_meshResource; }
-	MeshResource* GetMeshResource() { return c_meshResource; }
+	void SetMeshResource(IMeshResource* p_meshResource) { c_meshResource = p_meshResource; }
+	IMeshResource* GetMeshResource() { return c_meshResource; }
+	void SetTexture(Image* p_texture);
 
 private:
-	MeshResource* c_meshResource;
+	IMeshResource* c_meshResource;
 	void BeginDraw();
 	void EndDraw();
 };
