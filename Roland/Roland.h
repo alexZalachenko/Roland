@@ -1,7 +1,6 @@
 #pragma once
+class IGraphicEngine;
 #include "RolandUtilities.h"
-#include "IGraphicEngine.h"
-
 /*
 Roland is the main class which holds actual graphic library used (OpenGL, DirectX). 
 Roland recives the parameters for creating a window and the desired graphic library

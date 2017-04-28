@@ -6,10 +6,10 @@
 #include "MeshResourceOpenGL.h"
 #define GLEW_STATIC //use static binding. All the code used from the library is put into the executable and no needed to attach a dll
 #include <GL/glew.h>//for abstracting cumbersome OpenGL procedures
+#include <iostream>
+#include <fstream>
 
-/*
-for loading resources using OpenGL specific techniques
-*/
+//for loading resources using OpenGL specific techniques
 
 ResourcesLoaderOpenGL::ResourcesLoaderOpenGL()
 {
@@ -21,6 +21,11 @@ ResourcesLoaderOpenGL::~ResourcesLoaderOpenGL()
 
 IResource* ResourcesLoaderOpenGL::LoadImage(std::string p_file)
 {
+	int t_width, t_height;
+	unsigned char* t_imageData = SOIL_load_image(p_file.c_str(), &t_width, &t_height, 0, SOIL_LOAD_RGB);
+	if (t_imageData == 0)
+		return nullptr;
+
 	glActiveTexture(GL_TEXTURE0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT (usually basic wrapping method)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -28,8 +33,6 @@ IResource* ResourcesLoaderOpenGL::LoadImage(std::string p_file)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	int t_width, t_height;
-	unsigned char* t_imageData = SOIL_load_image(p_file.c_str(), &t_width, &t_height, 0, SOIL_LOAD_RGB);
 	GLuint t_texture;
 	glGenTextures(1, &t_texture);
 	glBindTexture(GL_TEXTURE_2D, t_texture);
@@ -50,9 +53,10 @@ IResource* ResourcesLoaderOpenGL::LoadImage(std::string p_file)
 
 IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 {
-	//read mesh vertices data using a library instead of this hardcoded
-	std::vector<Rol::Vertex> t_vertices = std::vector<Rol::Vertex>();
-	std::vector<unsigned int> t_indices{ 0,1,3,1,2,3 };
+	int t_previousVertices = 0;
+	std::vector<Rol::Vertex> t_vertices;
+	std::vector<unsigned int> t_facesIndex;
+	MeshResourceOpenGL* t_newMeshResource = new MeshResourceOpenGL();
 
 	if (p_file == "fakeMesh.obj")
 	{
@@ -60,7 +64,7 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 			Rol::Vertex(
 				glm::vec3(0.5f, 0.5f, 0.0f),
 				glm::vec4(1.f, 0.f, 0.f, 1.f),
-				glm::vec2(1.f,1.f)));
+				glm::vec2(1.f, 1.f)));
 		t_vertices.push_back(
 			Rol::Vertex(
 				glm::vec3(0.5f, -0.5f, 0.0f),
@@ -76,7 +80,74 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 				glm::vec3(-0.5f, 0.5f, 0.0f),
 				glm::vec4(1.f, 1.f, 0.f, 1.f),
 				glm::vec2(0.f, 1.f)));
+		t_facesIndex.push_back(0);
+		t_facesIndex.push_back(1);
+		t_facesIndex.push_back(3);
+		t_facesIndex.push_back(1);
+		t_facesIndex.push_back(2);
+		t_facesIndex.push_back(3);
+
+		t_newMeshResource->AddObject("objectOne");
+		t_newMeshResource->AddVertices(t_vertices);
+		t_newMeshResource->AddFaces(t_facesIndex);
+		return t_newMeshResource;
 	}
-	//indexed drawing can be used or not
-	return new MeshResourceOpenGL(t_vertices, t_indices);
+	
+	std::ifstream t_fileReader(p_file, std::ifstream::in);
+	if (!t_fileReader)
+		return nullptr;
+
+	std::string t_line;
+	char* t_nextToken = nullptr;
+	while (std::getline(t_fileReader, t_line))
+	{
+		//comment
+		if (t_line[0] == '#')
+			continue;
+		//new object
+		if (t_line[0] == 'o')
+		{
+			t_previousVertices += t_vertices.size();
+			//add the data from the previous object
+			if (t_previousVertices != 0)
+			{
+				t_newMeshResource->AddVertices(t_vertices);
+				t_vertices.clear();
+				t_newMeshResource->AddFaces(t_facesIndex);
+				t_facesIndex.clear();
+			}
+			//create the new object
+			t_newMeshResource->AddObject(t_line.substr(1));
+		}
+		//new vertex
+		if (t_line[0] == 'v' && t_line[1] == ' ')
+		{
+			strtok_s(&t_line[0u], " ", &t_nextToken);
+			float x = std::stof(strtok_s(NULL, " ", &t_nextToken));
+			float y = std::stof(strtok_s(NULL, " ", &t_nextToken));
+			float z = std::stof(strtok_s(NULL, " ", &t_nextToken));
+			t_vertices.push_back(Rol::Vertex(
+				glm::vec3(
+					x,
+					y, 
+					z
+				)
+			));
+		}
+		//new face
+		if (t_line[0] == 'f')
+		{
+			//only accept triangle faces
+			strtok_s(&t_line[0u], " ", &t_nextToken);
+			std::string t_face;
+			for (size_t t_index = 0; t_index < 3; ++t_index)
+			{
+				t_face = strtok_s(NULL, " ", &t_nextToken);
+				t_facesIndex.push_back(atoi(t_face.substr(0, t_face.find("/")).c_str()) - t_previousVertices);
+			}
+		}
+	}
+	t_newMeshResource->AddVertices(t_vertices);
+	t_newMeshResource->AddFaces(t_facesIndex);
+	return t_newMeshResource;
 }

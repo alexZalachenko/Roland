@@ -1,10 +1,11 @@
 #pragma once
 #include "RolandUtilities.h"
+#include "ResourcesManager.h"
 #include "Node.h"
-#include "Mesh.h"
-#include "Image.h"
 #include "ResourcesManager.h"
 #include "ShadersManager.h"
+class Mesh;
+class Image;
 class IEntity;
 class IGraphicEngine;
 class Transform;
@@ -44,7 +45,7 @@ public:
 protected:
 	Node c_rootNode;
 	ResourcesManager	c_resourcesManager;
-	Rol::RenderEngines	c_usedEngine;
 	ShadersManager c_shadersManager;
+	Rol::RenderEngines	c_usedEngine;
 };
 

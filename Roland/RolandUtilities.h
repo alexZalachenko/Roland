@@ -2,6 +2,7 @@
 #include <string>
 #include <glm\vec3.hpp>
 #include <glm\vec2.hpp>
+#include <vector>
 
 namespace Rol
 {
@@ -44,5 +45,16 @@ namespace Rol
 		glm::vec3 c_position;
 		glm::vec3 c_color;
 		glm::vec2 c_textureCoords;
+	};
+
+	struct Object
+	{
+		std::string c_name;
+		std::vector<Vertex> c_vertices;
+		std::vector<unsigned int> c_facesIndex;
+		Object(std::string p_name)
+			:c_name(p_name)
+		{
+		}
 	};
 }

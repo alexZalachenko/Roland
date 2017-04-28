@@ -113,30 +113,35 @@ void			OpenGLEngine::StartLoop()
 }
 
 				/*Methods related to engine's functionality*/
+//user is responsible of freeing memory of the returned object
 Node*			OpenGLEngine::CreateNode(Node* p_father, IEntity* p_IEntity)
 {
 	Node* t_newNode = new Node(p_father, p_IEntity);
 	return t_newNode;
 }
 
+//user is responsible of freeing memory of the returned object
 Node*			OpenGLEngine::CreateNode()
 {
 	Node* t_newNode = new Node();
 	return t_newNode;
 }
 
+//user is responsible of freeing memory of the returned object
 Transform*		OpenGLEngine::CreateTransform()
 {
 	Transform* t_newTransform = new Transform;
 	return t_newTransform;
 }
 
+//user is responsible of freeing memory of the returned object
 Camera*			OpenGLEngine::CreateCamera()
 {
 	//TODO
 	return nullptr;
 }
 
+//user is responsible of freeing memory of the returned object
 Light*			OpenGLEngine::CreateLight()
 {
 	//TODO
@@ -144,12 +149,13 @@ Light*			OpenGLEngine::CreateLight()
 	return t_newLight;
 }
 
+//user is responsible of freeing memory of the returned object
 Mesh*			OpenGLEngine::CreateMesh(std::string p_file)
 {
 	if (!std::regex_match(p_file, std::regex{ R"(.*\.(obj|3ds|FBX|blend)$)" }))
 	{
 		std::cout << "Mesh format not supported" << std::endl;
-		exit(-1);
+		return nullptr;
 	}
 
 	Mesh* r_newMesh = new Mesh;
@@ -161,10 +167,11 @@ Mesh*			OpenGLEngine::CreateMesh(std::string p_file)
 	return r_newMesh;
 }
 
-Mesh * OpenGLEngine::CreateMesh(std::string p_meshFile, std::string p_textureFile)
+//user is responsible of freeing memory of the returned object
+Mesh*			OpenGLEngine::CreateMesh(std::string p_meshFile, std::string p_textureFile)
 {
-	Mesh* t_newMesh = CreateMesh(p_meshFile);
-	if (t_newMesh != nullptr)
+	Mesh* t_newMesh = CreateMesh(p_meshFile);//it might not have any IMeshResource or mesh be null
+	if (t_newMesh != nullptr && t_newMesh->GetMeshResource() != nullptr)
 	{
 		Image* t_newImage = CreateImage(p_textureFile);
 		if (t_newImage != nullptr)
@@ -173,18 +180,17 @@ Mesh * OpenGLEngine::CreateMesh(std::string p_meshFile, std::string p_textureFil
 	return t_newMesh;
 }
 
-Image*	OpenGLEngine::CreateImage(std::string p_file)
+//user is responsible of freeing memory of the returned object. The method might return nullptr value
+Image*			OpenGLEngine::CreateImage(std::string p_file)
 {
 	if (!std::regex_match(p_file, std::regex{ R"(.*\.(png|jpg)$)" }))
 	{
 		std::cout << "Image format not supported" << std::endl;
-		exit(-1);
+		return nullptr;
 	}
 
 	Image* r_newImage = new Image;
-	//get the resource from the resources manager
 	IResource* t_resource = c_resourcesManager.GetResource(p_file);
-	//set it to the new created mesh
 	if (t_resource != nullptr)
 		r_newImage->SetImageResource(dynamic_cast<IImageResource*>(t_resource));
 	return r_newImage;
@@ -195,9 +201,10 @@ void			OpenGLEngine::DeleteImage(std::string p_file)
 	//TODO
 }
 
-				/*delete mesh from the resources manager. If the mesh is wanted again to be used it will must be loaded again*/
+//delete mesh from the resources manager. If the mesh is wanted again to be used it will must be loaded again
 void			OpenGLEngine::DeleteMesh(std::string p_file)
 {
+	
 	//TODO
 }
 

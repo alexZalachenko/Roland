@@ -9,40 +9,30 @@ class IImageResource;
 class IMeshResource : public IResource
 {
 public:
-	IMeshResource(std::vector<Rol::Vertex> p_vertices)
-		:c_vertices(p_vertices),
-		c_imageResource(nullptr)
+	IMeshResource()
+		:c_imageResource(nullptr)
 	{
 	}
-	IMeshResource(std::vector<Rol::Vertex> p_vertices, std::string p_name)
-		: IResource(p_name),
-		c_vertices(p_vertices),
-		c_imageResource(nullptr)
-	{
-	}
-	IMeshResource(std::vector<Rol::Vertex> p_vertices, std::vector<unsigned int> p_indices)
-		:c_vertices(p_vertices),
-		 c_indices(p_indices),
-		 c_imageResource(nullptr)
-	{
-	}
-	IMeshResource(std::vector<Rol::Vertex> p_vertices, std::vector<unsigned int> p_indices, std::string p_name)
+	IMeshResource(std::string p_name)
 		:IResource(p_name),
-		 c_vertices(p_vertices),
-		 c_indices(p_indices),
 		 c_imageResource(nullptr)
 	{
 	}
 	virtual ~IMeshResource()
 	{
 	}
-	std::vector<Rol::Vertex> GetVertices() { return c_vertices; }
-	virtual void Display() = 0;
+
+	virtual void AddObject(std::string p_name) = 0;
+	virtual void AddVertices(std::vector<Rol::Vertex> p_vertices) = 0;
+	virtual void AddFaces(std::vector<unsigned int> p_faces) = 0;
+
 	void SetTexture(IImageResource* p_texture) { c_imageResource = p_texture; }
+	//methods for retrieving info about the mesh
+	virtual void Display() = 0;
+	
 
 protected:
-	std::vector<Rol::Vertex> c_vertices;
-	std::vector<unsigned int> c_indices;
+	std::vector<Rol::Object> c_objects;
 	IImageResource* c_imageResource;
 };
 

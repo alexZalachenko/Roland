@@ -5,17 +5,20 @@
 class MeshResourceOpenGL : public IMeshResource
 {
 public:
-	MeshResourceOpenGL(std::vector<Rol::Vertex> p_vertices);
-	MeshResourceOpenGL(std::vector<Rol::Vertex> p_vertices, std::string p_name);
-	MeshResourceOpenGL(std::vector<Rol::Vertex> p_vertices, std::vector<unsigned int> p_indices);
-	MeshResourceOpenGL(std::vector<Rol::Vertex> p_vertices, std::vector<unsigned int> p_indices, std::string p_name);
+	MeshResourceOpenGL();
+	MeshResourceOpenGL(std::string p_name);
 	~MeshResourceOpenGL();
 	void Display() override;
 
+	void AddObject(std::string p_name) override;
+	void AddVertices(std::vector<Rol::Vertex> p_vertices) override;
+	void AddFaces(std::vector<unsigned int> p_faces) override;
+	bool CheckIfValidObject(int p_valueToCheck);//0=vertices 1=faces. Returns true if vertices/faces can be added
+
 private:
-	unsigned int c_vao;
+	std::vector<unsigned int> c_vao;
 	std::vector<unsigned int> c_vbo;
-	unsigned int c_ebo;
+	std::vector<unsigned int> c_ebo;
 	void SetupData();
 };
 

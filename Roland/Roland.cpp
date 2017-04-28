@@ -1,5 +1,6 @@
 #include "Roland.h"
 #include "OpenGLEngine.h"
+#include "IGraphicEngine.h"
 #include <iostream>
 
 Roland::Roland(Rol::RenderEngines p_renderEngine, Rol::WindowData p_windowData)

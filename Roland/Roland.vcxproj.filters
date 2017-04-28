@@ -40,8 +40,11 @@
     <Filter Include="Archivos de encabezado\Roland\ResourcesManager">
       <UniqueIdentifier>{7cc6bfb3-95e0-4d03-a5da-eeef0a65a5a1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de código fuente\OpenGL\Shaders">
+    <Filter Include="Archivos de código fuente\Shaders">
       <UniqueIdentifier>{5bec0c00-ae72-4912-8129-336e083d3602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Shaders">
+      <UniqueIdentifier>{64681836-7a4d-4b5d-a0a3-3dae13c7183f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -52,7 +55,7 @@
       <Filter>Archivos de código fuente\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="VertexShader.txt">
-      <Filter>Archivos de código fuente\OpenGL\Shaders</Filter>
+      <Filter>Archivos de código fuente\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="Roland.cpp">
       <Filter>Archivos de código fuente\Roland</Filter>
@@ -76,13 +79,10 @@
       <Filter>Archivos de código fuente\Roland\ResourcesManager</Filter>
     </ClCompile>
     <ClCompile Include="FragmentShader.txt">
-      <Filter>Archivos de código fuente\OpenGL\Shaders</Filter>
+      <Filter>Archivos de código fuente\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="IResource.cpp">
       <Filter>Archivos de código fuente\Roland\ResourcesManager</Filter>
-    </ClCompile>
-    <ClCompile Include="ShadersManager.cpp">
-      <Filter>Archivos de código fuente\Roland</Filter>
     </ClCompile>
     <ClCompile Include="Image.cpp">
       <Filter>Archivos de código fuente\Roland\SceneTree</Filter>
@@ -95,6 +95,9 @@
     </ClCompile>
     <ClCompile Include="ImageResourceOpenGL.cpp">
       <Filter>Archivos de código fuente\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadersManager.cpp">
+      <Filter>Archivos de código fuente\Shaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -114,9 +117,6 @@
       <Filter>Archivos de encabezado\Roland</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
-      <Filter>Archivos de encabezado\Roland\SceneTree</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix4x4.h">
       <Filter>Archivos de encabezado\Roland\SceneTree</Filter>
     </ClInclude>
     <ClInclude Include="Node.h">
@@ -140,9 +140,6 @@
     <ClInclude Include="IResource.h">
       <Filter>Archivos de encabezado\Roland\ResourcesManager</Filter>
     </ClInclude>
-    <ClInclude Include="ShadersManager.h">
-      <Filter>Archivos de encabezado\Others</Filter>
-    </ClInclude>
     <ClInclude Include="Image.h">
       <Filter>Archivos de encabezado\Roland\SceneTree</Filter>
     </ClInclude>
@@ -163,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="ImageResourceOpenGL.h">
       <Filter>Archivos de encabezado\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadersManager.h">
+      <Filter>Archivos de encabezado\Shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
