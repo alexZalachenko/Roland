@@ -10,8 +10,8 @@ ShadersManager::ShadersManager()
 
 ShadersManager::~ShadersManager()
 {
-	std::map<std::string, GLuint>::iterator t_iterator;
-	for (t_iterator = c_programs.begin(); t_iterator != c_programs.end(); ++t_iterator)
+	//std::map<std::string, GLuint>::iterator t_iterator;
+	for (auto t_iterator = c_programs.begin(); t_iterator != c_programs.end(); ++t_iterator)
 		glDeleteProgram(t_iterator->second);
 }
 
@@ -23,8 +23,9 @@ GLuint	ShadersManager::CreateProgram(std::string p_vertexShaderFile, std::string
 	//create a program
 	GLuint t_shaderProgram = glCreateProgram();
 	//link the compiled shaders to a program
-	LinkShader(t_compiledVertexShader,   &t_shaderProgram);
-	LinkShader(t_compiledFragmentShader, &t_shaderProgram);
+	LinkShader(&t_shaderProgram, t_compiledVertexShader);
+	LinkShader(&t_shaderProgram, t_compiledFragmentShader);
+	glLinkProgram(t_shaderProgram);;
 	//store the program
 	c_programs[p_programName] = t_shaderProgram;
 	return t_shaderProgram;
@@ -46,10 +47,10 @@ GLuint	ShadersManager::CompileShader(std::string p_shaderFile, unsigned short p_
 			t_shaderCode += "\n" + Line;
 		t_shaderStream.close();
 	}
-	else {
-		std::cout << "asd";
+	else 
+	{
 		std::cout << "Impossible to open " << p_shaderFile << std::endl;
-		exit(-1);
+		return 0;
 	}
 
 	char const * t_shaderCodeConverted = t_shaderCode.c_str();
@@ -64,22 +65,21 @@ GLuint	ShadersManager::CompileShader(std::string p_shaderFile, unsigned short p_
 	{
 		glGetShaderInfoLog(r_shaderID, 512, NULL, t_infoLog);//store the query info in t_infoLog
 		std::cout << "ERROR COMPILING SHADER " << p_shaderFile << " COMPILATION_FAILED\n" << t_infoLog << std::endl;
-		exit(-1);
+		return 0;
 	}
 	return r_shaderID;
 }
 
-void	ShadersManager::LinkShader(GLuint p_shader, GLuint* p_program)
+void	ShadersManager::LinkShader(GLuint* p_program, GLuint p_shader)
 {
 	glAttachShader(*p_program, p_shader);
-	glLinkProgram(*p_program);
 	GLint t_success;
 	GLchar t_infoLog[512];
 	glGetProgramiv(*p_program, GL_LINK_STATUS, &t_success);
 	if (!t_success) {
 		glGetProgramInfoLog(*p_program, 512, NULL, t_infoLog);
 		std::cout << "ERROR LINKING SHADER. LINKING_FAILED\n" << t_infoLog << std::endl;
-		exit(-1);
+		return;
 	}
 	glDeleteShader(p_shader);
 }

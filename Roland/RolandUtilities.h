@@ -50,7 +50,6 @@ namespace Rol
 	struct Object
 	{
 		std::string c_name;
-		std::vector<Vertex> c_vertices;
 		std::vector<unsigned int> c_facesIndex;
 		Object(std::string p_name)
 			:c_name(p_name)

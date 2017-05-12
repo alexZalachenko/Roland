@@ -21,18 +21,18 @@ public:
 	virtual ~IMeshResource()
 	{
 	}
-
-	virtual void AddObject(std::string p_name) = 0;
-	virtual void AddVertices(std::vector<Rol::Vertex> p_vertices) = 0;
-	virtual void AddFaces(std::vector<unsigned int> p_faces) = 0;
-
+	virtual void CreateMesh(std::string p_name, std::vector<Rol::Vertex> p_vertices, std::vector<unsigned int> p_indices) = 0;
+	virtual void CreateMesh(std::vector<Rol::Vertex> p_vertices, std::vector<unsigned int> p_indices) = 0;
+	virtual void CreateMesh(std::vector<Rol::Vertex> p_vertices) = 0;
 	void SetTexture(IImageResource* p_texture) { c_imageResource = p_texture; }
-	//methods for retrieving info about the mesh
 	virtual void Display() = 0;
 	
 
 protected:
-	std::vector<Rol::Object> c_objects;
+	std::vector<Rol::Vertex> c_vertices;
+	std::vector<unsigned int> c_indices;
+
+	//std::vector<Rol::Object> c_objects;
 	IImageResource* c_imageResource;
 };
 

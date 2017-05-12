@@ -53,7 +53,7 @@ IResource* ResourcesLoaderOpenGL::LoadImage(std::string p_file)
 
 IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 {
-	int t_previousVertices = 0;
+	bool t_firstObject = true;
 	std::vector<Rol::Vertex> t_vertices;
 	std::vector<unsigned int> t_facesIndex;
 	MeshResourceOpenGL* t_newMeshResource = new MeshResourceOpenGL();
@@ -87,9 +87,7 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 		t_facesIndex.push_back(2);
 		t_facesIndex.push_back(3);
 
-		t_newMeshResource->AddObject("objectOne");
-		t_newMeshResource->AddVertices(t_vertices);
-		t_newMeshResource->AddFaces(t_facesIndex);
+		t_newMeshResource->CreateMesh(t_vertices, t_facesIndex);
 		return t_newMeshResource;
 	}
 	
@@ -107,17 +105,15 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 		//new object
 		if (t_line[0] == 'o')
 		{
-			t_previousVertices += t_vertices.size();
-			//add the data from the previous object
-			if (t_previousVertices != 0)
-			{
-				t_newMeshResource->AddVertices(t_vertices);
-				t_vertices.clear();
-				t_newMeshResource->AddFaces(t_facesIndex);
-				t_facesIndex.clear();
-			}
-			//create the new object
-			t_newMeshResource->AddObject(t_line.substr(1));
+			//if (!t_firstObject)
+			//{
+			//	//t_newMeshResource->AddVertices(t_vertices);
+			//	//t_vertices.clear();
+			//	//t_newMeshResource->AddFaces(t_facesIndex);
+			//	//t_facesIndex.clear();
+			//}
+			////create the new object
+			//t_newMeshResource->AddObject(t_line.substr(1));
 		}
 		//new vertex
 		if (t_line[0] == 'v' && t_line[1] == ' ')
@@ -143,11 +139,10 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 			for (size_t t_index = 0; t_index < 3; ++t_index)
 			{
 				t_face = strtok_s(NULL, " ", &t_nextToken);
-				t_facesIndex.push_back(atoi(t_face.substr(0, t_face.find("/")).c_str()) - t_previousVertices);
+				t_facesIndex.push_back(atoi(t_face.substr(0, t_face.find("/")).c_str()));
 			}
 		}
 	}
-	t_newMeshResource->AddVertices(t_vertices);
-	t_newMeshResource->AddFaces(t_facesIndex);
+	t_newMeshResource->CreateMesh(t_vertices, t_facesIndex);
 	return t_newMeshResource;
 }

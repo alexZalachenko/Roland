@@ -26,8 +26,6 @@ OpenGLEngine::OpenGLEngine()
 OpenGLEngine::~OpenGLEngine()
 {
 	//delete lights delete cameras
-	/*glDeleteShader(c_vertexShader);
-	glDeleteShader(c_fragmentShader);*/
 	Terminate();
 }
 

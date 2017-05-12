@@ -14,7 +14,7 @@ public:
 
 private:
 	GLuint CompileShader(std::string p_shaderFile, unsigned short p_shaderType);
-	void LinkShader(GLuint p_shader, GLuint* p_program);
+	void LinkShader(GLuint* p_program, GLuint p_shader);
 	std::map<std::string, GLuint> c_programs;
 };
 
