@@ -10,7 +10,6 @@
 #include <fstream>
 
 //for loading resources using OpenGL specific techniques
-
 ResourcesLoaderOpenGL::ResourcesLoaderOpenGL()
 {
 }
@@ -91,6 +90,7 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 		return t_newMeshResource;
 	}
 	
+	//read the file to load the model from
 	std::ifstream t_fileReader(p_file, std::ifstream::in);
 	if (!t_fileReader)
 		return nullptr;
@@ -118,17 +118,25 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 		//new vertex
 		if (t_line[0] == 'v' && t_line[1] == ' ')
 		{
-			strtok_s(&t_line[0u], " ", &t_nextToken);
+			strtok_s(&t_line[0], " ", &t_nextToken);
 			float x = std::stof(strtok_s(NULL, " ", &t_nextToken));
 			float y = std::stof(strtok_s(NULL, " ", &t_nextToken));
 			float z = std::stof(strtok_s(NULL, " ", &t_nextToken));
-			t_vertices.push_back(Rol::Vertex(
-				glm::vec3(
-					x,
-					y, 
-					z
+			t_vertices.push_back(
+				Rol::Vertex(
+					glm::vec3(
+						x,
+						y, 
+						z
+					),
+					glm::vec4(
+						(rand() % 100)/100.f,
+						(rand() % 100)/100.f,
+						(rand() % 100)/100.f,
+						1
+					)
 				)
-			));
+			);
 		}
 		//new face
 		if (t_line[0] == 'f')

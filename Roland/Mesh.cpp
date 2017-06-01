@@ -1,8 +1,11 @@
 #include "Mesh.h"
 #include "IMeshResource.h"
 #include "Image.h"
+#include "ModelMatrix.h"
 
-Mesh::Mesh()
+Mesh::Mesh(ModelMatrix* p_modelMatrix)
+	: IEntity(MeshType)
+	, c_modelMatrix(p_modelMatrix)
 {
 }
 
@@ -15,7 +18,10 @@ Mesh::~Mesh()
 void Mesh::BeginDraw()
 {
 	if (c_meshResource != nullptr)
+	{
+		c_modelMatrix->ModelMatrixToShader();
 		c_meshResource->Display();
+	}
 }
 
 void Mesh::EndDraw()

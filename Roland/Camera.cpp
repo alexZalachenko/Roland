@@ -1,9 +1,13 @@
 #include "Camera.h"
 
-//TODO
-
 Camera::Camera()
-	:c_isActive(false)
+	: IEntity(CameraType)
+{
+}
+
+Camera::Camera(glm::mat4 p_projectionMatrix)
+	: IEntity(CameraType), 
+	  c_projectionMatrix(p_projectionMatrix)
 {
 }
 
@@ -11,31 +15,3 @@ Camera::~Camera()
 {
 }
 
-void Camera::SetPerspective(float a, float b)
-{
-
-}
-
-void Camera::SetParallel(float a, float b)
-{
-}
-
-void Camera::BeginDraw()
-{
-
-}
-
-void Camera::EndDraw()
-{
-
-}
-
-bool Camera::GetIsActive()
-{
-	return c_isActive;
-}
-
-void Camera::SetIsActive(bool p_isActive)
-{
-	c_isActive = p_isActive;
-}

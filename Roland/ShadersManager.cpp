@@ -23,9 +23,10 @@ GLuint	ShadersManager::CreateProgram(std::string p_vertexShaderFile, std::string
 	//create a program
 	GLuint t_shaderProgram = glCreateProgram();
 	//link the compiled shaders to a program
-	LinkShader(&t_shaderProgram, t_compiledVertexShader);
-	LinkShader(&t_shaderProgram, t_compiledFragmentShader);
-	glLinkProgram(t_shaderProgram);;
+	glAttachShader(t_shaderProgram, t_compiledVertexShader);
+	glAttachShader(t_shaderProgram, t_compiledFragmentShader);
+	LinkProgram(&t_shaderProgram, t_compiledVertexShader, t_compiledFragmentShader);
+	
 	//store the program
 	c_programs[p_programName] = t_shaderProgram;
 	return t_shaderProgram;
@@ -64,22 +65,26 @@ GLuint	ShadersManager::CompileShader(std::string p_shaderFile, unsigned short p_
 	if (!t_success)
 	{
 		glGetShaderInfoLog(r_shaderID, 512, NULL, t_infoLog);//store the query info in t_infoLog
-		std::cout << "ERROR COMPILING SHADER " << p_shaderFile << " COMPILATION_FAILED\n" << t_infoLog << std::endl;
+		std::cout << "ERROR COMPILING SHADER " << p_shaderFile << " COMPILATION_FAILED. INFO LOG: " << t_infoLog << std::endl;
 		return 0;
 	}
 	return r_shaderID;
 }
 
-void	ShadersManager::LinkShader(GLuint* p_program, GLuint p_shader)
+void	ShadersManager::LinkProgram(GLuint* p_program, GLuint p_vertexShader, GLuint p_fragmentShader)
 {
-	glAttachShader(*p_program, p_shader);
+	glLinkProgram(*p_program);
+	// Print linking errors if any
 	GLint t_success;
 	GLchar t_infoLog[512];
 	glGetProgramiv(*p_program, GL_LINK_STATUS, &t_success);
-	if (!t_success) {
+	if (!t_success)
+	{
 		glGetProgramInfoLog(*p_program, 512, NULL, t_infoLog);
-		std::cout << "ERROR LINKING SHADER. LINKING_FAILED\n" << t_infoLog << std::endl;
-		return;
+		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << t_infoLog << std::endl;
 	}
-	glDeleteShader(p_shader);
+
+	// Delete the shaders as they're linked into our program now and no longer necessery
+	glDeleteShader(p_vertexShader);
+	glDeleteShader(p_fragmentShader);
 }

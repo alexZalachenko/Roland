@@ -1,9 +1,12 @@
 #include "Transform.h"
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "ModelMatrix.h"
 
-Transform::Transform()
-	:c_matrix()
+Transform::Transform(ModelMatrix* p_modelMatrix)
+	:IEntity(TransformType),
+	 c_matrix(),
+	 c_modelMatrix(p_modelMatrix)
 {
 }
 
@@ -13,10 +16,7 @@ Transform::~Transform()
 
 void Transform::SetIdentity()
 {
-	c_matrix[0][0] = 1;
-	c_matrix[1][1] = 1;
-	c_matrix[2][2] = 1;
-	c_matrix[3][3] = 1;
+	c_matrix = glm::mat4();//the default constructor creates a indentity matrix;
 }
 	 
 void Transform::LoadMatrix(glm::mat4 p_matrix)
@@ -34,9 +34,10 @@ void Transform::Translate(float p_translationX, float p_translationY, float p_tr
 	c_matrix = glm::translate(c_matrix, glm::vec3(p_translationX, p_translationY, p_translationZ));
 }
 
+//set rotation in degrees
 void Transform::Rotate(float p_rotation, float p_rotationX, float p_rotationY, float p_rotationZ)
 {
-	c_matrix = glm::rotate(c_matrix, p_rotation, glm::vec3(p_rotationX, p_rotationY, p_rotationZ));
+	c_matrix = glm::rotate(c_matrix, glm::radians(p_rotation), glm::vec3(p_rotationX, p_rotationY, p_rotationZ));
 }
 
 void Transform::Scale(float p_scaleX, float p_scaleY, float p_scaleZ)
@@ -46,14 +47,10 @@ void Transform::Scale(float p_scaleX, float p_scaleY, float p_scaleZ)
 
 void Transform::BeginDraw()
 {
-	//TODO
-
-	//apilar matriz actual
-	//multiplicar la matriz de la transformacion a la matriz actual
+	c_modelMatrix->PushMatrix(c_matrix);
 }
 
 void Transform::EndDraw()
 {
-	//TODO
-	//desapilar matriz y ponerla como actual
+	c_modelMatrix->PopMatrix();
 }

@@ -16,6 +16,7 @@ public:
 	int			AddChildren(Node* p_children);
 	int			RemoveChildren(Node* p_children);
 	void		Draw();
+	Node*		GetRoot();
 
 private:
 	IEntity* c_IEntity;

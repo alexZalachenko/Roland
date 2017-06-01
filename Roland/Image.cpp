@@ -2,8 +2,8 @@
 #include "IImageResource.h"
 
 Image::Image()
-	: IEntity(),
-	c_imageResource(nullptr)
+	: IEntity(ImageType),
+	  c_imageResource(nullptr)
 {
 }
 

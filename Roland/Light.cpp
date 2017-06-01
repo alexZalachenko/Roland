@@ -1,8 +1,9 @@
 #include "Light.h"
 
 Light::Light()
-	:c_intensity(0,0,0),
-	c_isActive(false)
+	: IEntity(LightType), 
+	  c_intensity(0,0,0),
+	  c_isActive(false)
 {
 }
 

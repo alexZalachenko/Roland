@@ -98,3 +98,11 @@ void Node::Draw()
 			t_children->Draw();
 	}
 }
+
+Node * Node::GetRoot()
+{
+	if (c_father != nullptr)
+		return c_father->GetRoot();
+	else
+		return this;
+}

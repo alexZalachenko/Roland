@@ -32,20 +32,24 @@ public:
 	virtual Node*			CreateNode(Node* p_father, IEntity* p_IEntity) = 0;
 	virtual Node*			CreateNode() = 0;
 	virtual Transform*		CreateTransform() = 0;
-	virtual Camera*			CreateCamera() = 0;
+	virtual Camera*			CreatePerspectiveCamera(float p_far, float p_near, float p_fov, float p_width, float p_height) = 0;
+	virtual Camera*			CreateOrthographicCamera(float p_near, float p_far, float p_left, float p_right, float p_top, float p_bottom) = 0;
 	virtual Light*			CreateLight() = 0;
 	virtual Mesh*			CreateMesh(std::string p_file) = 0;
 	virtual Mesh*			CreateMesh(std::string p_meshFile, std::string p_textureFile) = 0;
 	virtual void			DeleteMesh(std::string p_file) = 0;
 	virtual Image*			CreateImage(std::string p_file) = 0;
 	virtual void			DeleteImage(std::string p_file) = 0;
+	virtual void			RegisterLightNode(Node* p_lightNode) = 0;
+	virtual void			SetActiveCamera(Node* p_cameraNode) = 0;
 			Node*			GetRootNode() { return &c_rootNode; }
 			void			AddNodeToRoot(Node* p_node) { c_rootNode.AddChildren(p_node); }
 
 protected:
-	Node c_rootNode;
+	Node				c_rootNode;
+	Node*				c_activeCamera;
 	ResourcesManager	c_resourcesManager;
-	ShadersManager c_shadersManager;
+	ShadersManager		c_shadersManager;
 	Rol::RenderEngines	c_usedEngine;
 };
 

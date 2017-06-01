@@ -81,9 +81,12 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshResourceOpenGL.cpp" />
+    <ClCompile Include="ModelMatrix.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="OpenGLEngine.cpp" />
     <ClCompile Include="IResource.cpp" />
+    <ClCompile Include="OrthographicCamera.cpp" />
+    <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="ResourcesLoaderOpenGL.cpp" />
     <ClCompile Include="ResourcesManager.cpp" />
     <ClCompile Include="Roland.cpp" />
@@ -106,9 +109,12 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshResourceOpenGL.h" />
     <ClInclude Include="IMeshResource.h" />
+    <ClInclude Include="ModelMatrix.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="OpenGLEngine.h" />
     <ClInclude Include="IResource.h" />
+    <ClInclude Include="OrthographicCamera.h" />
+    <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="ResourcesLoaderOpenGL.h" />
     <ClInclude Include="ResourcesManager.h" />
     <ClInclude Include="Roland.h" />

@@ -99,6 +99,15 @@
     <ClCompile Include="ShadersManager.cpp">
       <Filter>Archivos de código fuente\Shaders</Filter>
     </ClCompile>
+    <ClCompile Include="OrthographicCamera.cpp">
+      <Filter>Archivos de código fuente\Roland\SceneTree</Filter>
+    </ClCompile>
+    <ClCompile Include="PerspectiveCamera.cpp">
+      <Filter>Archivos de código fuente\Roland\SceneTree</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelMatrix.cpp">
+      <Filter>Archivos de código fuente\OpenGL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGLEngine.h">
@@ -163,6 +172,15 @@
     </ClInclude>
     <ClInclude Include="ShadersManager.h">
       <Filter>Archivos de encabezado\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="OrthographicCamera.h">
+      <Filter>Archivos de encabezado\Roland\SceneTree</Filter>
+    </ClInclude>
+    <ClInclude Include="PerspectiveCamera.h">
+      <Filter>Archivos de encabezado\Roland\SceneTree</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelMatrix.h">
+      <Filter>Archivos de encabezado\OpenGL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -9,6 +9,6 @@ uniform sampler2D ourTexture;
  
 void main()
 {
-  //out_color = color;
-  out_color = texture(ourTexture, textCoord);
+  out_color = color;
+  //out_color = texture(ourTexture, textCoord);
 }

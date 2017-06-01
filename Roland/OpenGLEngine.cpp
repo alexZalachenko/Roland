@@ -15,12 +15,15 @@
 #include "ResourcesManager.h"
 #include "Image.h"
 #include <regex>
+#include "PerspectiveCamera.h"
+#include "glm\gtc\type_ptr.hpp"
 
 OpenGLEngine::OpenGLEngine()
 	: c_window(nullptr),
 	IGraphicEngine(Rol::OpenGL)
 {
 	Init();
+	
 }
 
 OpenGLEngine::~OpenGLEngine()
@@ -36,7 +39,12 @@ void			OpenGLEngine::SetupEngine(Rol::WindowData p_windowData)
 	CreateWindow(p_windowData);
 	InitGlew();
 	InitCallbacks();
-	glUseProgram(c_shadersManager.CreateProgram("VertexShader.txt", "FragmentShader.txt", "program01"));
+	GLuint t_newProgram = c_shadersManager.CreateProgram("VertexShader.txt", "FragmentShader.txt", "program01");
+	c_shadersManager.UseProgram(t_newProgram);
+	c_modelMatrix.SetActiveProgram(t_newProgram);
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glEnable(GL_DEPTH_TEST);
 }
 
 void			OpenGLEngine::Terminate()
@@ -100,7 +108,7 @@ void			OpenGLEngine::StartLoop()
 
 		// Clear the colorbuffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//draw the scene tree
 		Draw();
@@ -128,14 +136,20 @@ Node*			OpenGLEngine::CreateNode()
 //user is responsible of freeing memory of the returned object
 Transform*		OpenGLEngine::CreateTransform()
 {
-	Transform* t_newTransform = new Transform;
+	Transform* t_newTransform = new Transform(&c_modelMatrix);
 	return t_newTransform;
 }
 
-//user is responsible of freeing memory of the returned object
-Camera*			OpenGLEngine::CreateCamera()
+//set fov in degrees. user is responsible of freeing memory of the returned object
+Camera*			OpenGLEngine::CreatePerspectiveCamera(float p_far, float p_near, float p_fov, float p_width, float p_height)
 {
-	//TODO
+	Camera* t_newCamera = new PerspectiveCamera(p_far, p_near, p_fov, p_width, p_height);
+	return t_newCamera;
+}
+
+//user is responsible of freeing memory of the returned object
+Camera*			OpenGLEngine::CreateOrthographicCamera(float p_near, float p_far, float p_left, float p_right, float p_top, float p_bottom)
+{
 	return nullptr;
 }
 
@@ -156,7 +170,7 @@ Mesh*			OpenGLEngine::CreateMesh(std::string p_file)
 		return nullptr;
 	}
 
-	Mesh* r_newMesh = new Mesh;
+	Mesh* r_newMesh = new Mesh(&c_modelMatrix);
 	//get the resource from the resources manager
 	IResource* t_resource = c_resourcesManager.GetResource(p_file);
 	//set it to the new created mesh
@@ -212,15 +226,42 @@ void			OpenGLEngine::RegisterLightNode(Node* p_lightNode)
 		c_lights.push_back(p_lightNode);
 }
 
-void			OpenGLEngine::RegisterCameraNode(Node* p_cameraNode)
+void			OpenGLEngine::SetActiveCamera(Node* p_cameraNode)
 {
-	if (p_cameraNode != nullptr)
-		c_cameras.push_back(p_cameraNode);
+	if (p_cameraNode == nullptr || p_cameraNode->GetIEntity() == nullptr || p_cameraNode->GetIEntity()->GetEntityType() != CameraType)
+		return;
+	c_activeCamera = p_cameraNode;
+	c_projectionMatrix = dynamic_cast<Camera*>(c_activeCamera->GetIEntity())->GetProjectionMatrix();
+	GLuint t_projectionMatrixLocation = glGetUniformLocation(c_shadersManager.GetActiveProgram(), "projectionMatrix");
+	glUniformMatrix4fv(t_projectionMatrixLocation, 1, GL_FALSE, glm::value_ptr(c_projectionMatrix));
 }
 
 void			OpenGLEngine::Draw()
 {
-	//TODO
+	//calculate viewMatrix
+	if (c_activeCamera != nullptr)
+	{
+		std::vector<glm::mat4> t_transforms;
+		//get all the transforms from the camera to the root of the scene tree
+		Node* t_father = c_activeCamera->GetFather();
+		while (t_father != nullptr)
+		{
+			if (t_father->GetIEntity() != nullptr && t_father->GetIEntity()->GetEntityType() == TransformType)
+				t_transforms.push_back(((Transform*)t_father->GetIEntity())->GetMatrix());
+			t_father = t_father->GetFather();
+		}
+		//multiply all the transforms from the leaf to the root
+		c_viewMatrix = glm::mat4();
+		//remember that last multiplication applied is the first. Last item in the vector is the first in the scene tree
+		for (auto it =  t_transforms.rbegin(); it != t_transforms.rend(); it++)
+			c_viewMatrix *= (*it);
+		c_viewMatrix = glm::inverse(c_viewMatrix);
+		
+		GLuint t_matrixLocation = glGetUniformLocation(c_shadersManager.GetActiveProgram(), "viewMatrix");
+		glUniformMatrix4fv(t_matrixLocation, 1, GL_FALSE, glm::value_ptr(c_viewMatrix));
+	}
+
+	//render lights
 	for (size_t t_index = 0; t_index < c_lights.size(); ++t_index)
 	{
 			/*recorrer el árbol a la inversa desde nodoLuz hasta la raiz
@@ -231,12 +272,5 @@ void			OpenGLEngine::Draw()
 			posicionar y activar la luz en la librería gráfica*/
 	}
 
-	/*nodoCamara = getCamaraActiva ();
-	 recorrer el árbol a la inversa desde nodoCamara hasta la raiz
-	 guardar el recorrido en una lista auxiliar de nodos de transformación
-	 invertir la lista auxiliar
-	 recorrer la lista auxiliar multiplicando las matrices en una matriz auxiliar
-	 invertir la matriz auxiliar
-	 cargar la matriz auxiliar en la matriz MODELVIEW de la librería gráfica */
 	c_rootNode.Draw();
 }
