@@ -7,25 +7,24 @@
 
 int main()
 {
+	//se inicia el motor
 	Roland t_roland(Rol::OpenGL, Rol::WindowData{ 800, 600, "Default title", false, false });
 	IGraphicEngine* motorGrafico = t_roland.GetGraphicEngine();
 
-	//mesh at the root
-	//Mesh*	t_entity = motorGrafico->CreateMesh("Assets/Meshes/cubo.obj");
+	//se crea una malla grafica con datos por programa
 	Mesh*	t_entity = motorGrafico->CreateMesh("fakeMesh.obj");
 	Node*	entityNode = motorGrafico->CreateNode(motorGrafico->GetRootNode(), t_entity);
 
+	//se crea una transformacion para posicionar la camara
 	Transform* t_transform = motorGrafico->CreateTransform();
-	t_transform->Rotate(45, 0, 1, 0);
+	t_transform->Translate(0, 0, -4);
 	Node*	t_transformNode = motorGrafico->CreateNode(motorGrafico->GetRootNode(), t_transform);
 
-	Transform* t_transform1 = motorGrafico->CreateTransform();
-	t_transform1->Translate(0, 0, 4);
-	Node*	t_transformNode1 = motorGrafico->CreateNode(t_transformNode, t_transform1);
-
+	//se crea una camara y se le añade la transformacion anterior
 	Camera* t_camera = motorGrafico->CreatePerspectiveCamera(100, 0.1f, 45, 800, 600);
-	Node*	t_cameraNode = motorGrafico->CreateNode(t_transformNode1, t_camera);
+	Node*	t_cameraNode = motorGrafico->CreateNode(t_transformNode, t_camera);
 	motorGrafico->SetActiveCamera(t_cameraNode);
 
+	//se inicia el bucle de juego
 	motorGrafico->StartLoop();
 }

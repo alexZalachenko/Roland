@@ -17,6 +17,8 @@
 #include <regex>
 #include "PerspectiveCamera.h"
 #include "glm\gtc\type_ptr.hpp"
+#include "FPSCamera.h"
+#include "InputHandler.h"
 
 OpenGLEngine::OpenGLEngine()
 	: c_window(nullptr),
@@ -43,7 +45,7 @@ void			OpenGLEngine::SetupEngine(Rol::WindowData p_windowData)
 	c_shadersManager.UseProgram(t_newProgram);
 	c_modelMatrix.SetActiveProgram(t_newProgram);
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glEnable(GL_DEPTH_TEST);
 }
 
@@ -82,6 +84,8 @@ void			OpenGLEngine::CreateWindow(Rol::WindowData p_windowData)
 	int t_width, t_height;
 	glfwGetFramebufferSize(c_window, &t_width, &t_height);
 	glViewport(0, 0, t_width, t_height);
+	OpenGLCallbacks::c_halfHeight = t_height / 2.f;
+	OpenGLCallbacks::c_halfWidth = t_width / 2.f;
 }
 
 void			OpenGLEngine::InitGlew()
@@ -96,7 +100,8 @@ void			OpenGLEngine::InitGlew()
 
 void			OpenGLEngine::InitCallbacks()
 {
-	glfwSetKeyCallback(c_window, OpenGLCallbacks::key_callback);
+	glfwSetKeyCallback(c_window, OpenGLCallbacks::HandleKeyboardInput);
+	glfwSetCursorPosCallback(c_window, OpenGLCallbacks::HandleMouseMovementInput);
 }
 
 void			OpenGLEngine::StartLoop()
@@ -236,6 +241,17 @@ void			OpenGLEngine::SetActiveCamera(Node* p_cameraNode)
 	glUniformMatrix4fv(t_projectionMatrixLocation, 1, GL_FALSE, glm::value_ptr(c_projectionMatrix));
 }
 
+FPSCamera*		OpenGLEngine::CreateFPSCamera(float p_far, float p_near, float p_fov, float p_width, float p_height)
+{
+	glfwSetInputMode(c_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	int t_width, t_height;
+	glfwGetWindowSize(c_window, &t_width, &t_height);
+	FPSCamera* t_newFPSCamera = new FPSCamera(p_far, p_near, p_fov, p_width, p_height, t_width/2.f, t_height/2.f);
+	InputHandler::Instance()->RegisterInputReceiver(t_newFPSCamera);
+	return t_newFPSCamera;
+}
+
 void			OpenGLEngine::Draw()
 {
 	//calculate viewMatrix
@@ -251,11 +267,11 @@ void			OpenGLEngine::Draw()
 			t_father = t_father->GetFather();
 		}
 		//multiply all the transforms from the leaf to the root
-		c_viewMatrix = glm::mat4();
 		//remember that last multiplication applied is the first. Last item in the vector is the first in the scene tree
+		c_viewMatrix = ((Camera*)c_activeCamera->GetIEntity())->GetViewMatrix();
 		for (auto it =  t_transforms.rbegin(); it != t_transforms.rend(); it++)
 			c_viewMatrix *= (*it);
-		c_viewMatrix = glm::inverse(c_viewMatrix);
+		//c_viewMatrix = glm::inverse(c_viewMatrix); //habria que descomentar
 		
 		GLuint t_matrixLocation = glGetUniformLocation(c_shadersManager.GetActiveProgram(), "viewMatrix");
 		glUniformMatrix4fv(t_matrixLocation, 1, GL_FALSE, glm::value_ptr(c_viewMatrix));

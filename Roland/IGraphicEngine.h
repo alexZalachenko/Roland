@@ -12,6 +12,7 @@ class Transform;
 class Camera;
 class Light;
 class Image;
+class FPSCamera;
 
 /*
 Interface that every implementation of the graphic engine must inherit.
@@ -42,6 +43,7 @@ public:
 	virtual void			DeleteImage(std::string p_file) = 0;
 	virtual void			RegisterLightNode(Node* p_lightNode) = 0;
 	virtual void			SetActiveCamera(Node* p_cameraNode) = 0;
+	virtual FPSCamera*		CreateFPSCamera(float p_far, float p_near, float p_fov, float p_width, float p_height) = 0;
 			Node*			GetRootNode() { return &c_rootNode; }
 			void			AddNodeToRoot(Node* p_node) { c_rootNode.AddChildren(p_node); }
 

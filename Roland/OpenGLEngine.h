@@ -31,19 +31,19 @@ public:
 	void			DeleteImage(std::string p_file) override;
 	void			RegisterLightNode(Node* p_lightNode) override;
 	void			SetActiveCamera(Node* p_cameraNode) override;
+	FPSCamera*		CreateFPSCamera(float p_far, float p_near, float p_fov, float p_width, float p_height);
 	void			Draw();
 
 private:
 	GLFWwindow*			c_window;
 	std::vector<Node*>	c_lights;
-	
+	glm::mat4	c_projectionMatrix;
+	ModelMatrix	c_modelMatrix;
+	glm::mat4	c_viewMatrix;
+
 	void	Init();
 	void	CreateWindow(Rol::WindowData p_windowData);
 	void	InitGlew();
 	void	InitCallbacks();
-
-	glm::mat4	c_projectionMatrix;
-	ModelMatrix	c_modelMatrix;
-	glm::mat4	c_viewMatrix;
 };
 

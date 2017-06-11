@@ -1,3 +1,35 @@
-﻿  OpenGLEngine.cpp
+﻿  Transform.cpp
+  ShadersManager.cpp
+  Roland.cpp
+  ResourcesManager.cpp
+  ResourcesLoaderOpenGL.cpp
+  PerspectiveCamera.cpp
+  OrthographicCamera.cpp
+  IResource.cpp
+  OpenGLEngine.cpp
+  Node.cpp
+  ModelMatrix.cpp
+  MeshResourceOpenGL.cpp
+  Mesh.cpp
+  Main.cpp
+  Light.cpp
+  InputHandler.cpp
+  ImageResourceOpenGL.cpp
+  Image.cpp
+  FPSCamera.cpp
+d:\repositoriogithub\roland\roland\fpscamera.cpp(53): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+d:\repositoriogithub\roland\roland\fpscamera.cpp(54): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+d:\repositoriogithub\roland\roland\fpscamera.cpp(55): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\repositoriogithub\roland\roland\fpscamera.cpp(56): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Camera.cpp
+  Generating Code...
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+ModelMatrix.obj : warning LNK4049: locally defined symbol ___glewGetUniformLocation imported
+ModelMatrix.obj : warning LNK4049: locally defined symbol ___glewUniformMatrix4fv imported
+glew32sd.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32sd.lib(glew.obj)' or at 'D:\RepositorioGitHub\Roland\Debug\vc120.pdb'; linking object as if no debug info
+SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'SOIL.lib(image_DXT.obj)' or at 'D:\RepositorioGitHub\Roland\Debug\SOIL.pdb'; linking object as if no debug info
+SOIL.lib(image_helper.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'SOIL.lib(image_helper.obj)' or at 'D:\RepositorioGitHub\Roland\Debug\SOIL.pdb'; linking object as if no debug info
+SOIL.lib(SOIL.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'SOIL.lib(SOIL.obj)' or at 'D:\RepositorioGitHub\Roland\Debug\SOIL.pdb'; linking object as if no debug info
+SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'SOIL.lib(stb_image_aug.obj)' or at 'D:\RepositorioGitHub\Roland\Debug\SOIL.pdb'; linking object as if no debug info
   Roland.vcxproj -> D:\RepositorioGitHub\Roland\Debug\Roland.exe
   Roland.vcxproj -> D:\RepositorioGitHub\Roland\Debug\Roland.pdb (Full PDB)

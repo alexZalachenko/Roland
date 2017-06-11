@@ -72,11 +72,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="FPSCamera.cpp" />
     <ClCompile Include="FragmentShader.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageResourceOpenGL.cpp" />
+    <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -98,12 +100,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="FPSCamera.h" />
     <ClInclude Include="IEntity.h" />
     <ClInclude Include="IGraphicEngine.h" />
     <ClInclude Include="CallbackFunctions.h" />
+    <ClInclude Include="IInputReceiverEntity.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="IImageResource.h" />
     <ClInclude Include="ImageResourceOpenGL.h" />
+    <ClInclude Include="InputHandler.h" />
     <ClInclude Include="IResourcesLoader.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Mesh.h" />

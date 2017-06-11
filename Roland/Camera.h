@@ -5,13 +5,16 @@
 class Camera : public IEntity
 {
 public:
-	Camera();
 	Camera(glm::mat4 p_projectionMatrix);
-	~Camera();
+	virtual ~Camera();
 	glm::mat4 GetProjectionMatrix()
 	{
 		return c_projectionMatrix;
 	};
+	virtual glm::mat4 GetViewMatrix()
+	{
+		return glm::mat4();
+	}
 
 private:
 	glm::mat4 c_projectionMatrix;

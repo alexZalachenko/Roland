@@ -108,6 +108,12 @@
     <ClCompile Include="ModelMatrix.cpp">
       <Filter>Archivos de código fuente\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="FPSCamera.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHandler.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGLEngine.h">
@@ -181,6 +187,15 @@
     </ClInclude>
     <ClInclude Include="ModelMatrix.h">
       <Filter>Archivos de encabezado\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="FPSCamera.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="InputHandler.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="IInputReceiverEntity.h">
+      <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

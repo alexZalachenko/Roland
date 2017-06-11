@@ -5,7 +5,6 @@ class OrthographicCamera : public Camera
 {
 
 public:
-	OrthographicCamera();
 	OrthographicCamera(float p_near, float p_far, float p_left, float p_right, float p_top, float p_bottom);
 	virtual ~OrthographicCamera();
 
