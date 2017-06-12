@@ -26,6 +26,7 @@ public:
 	virtual void CreateMesh(std::vector<Rol::Vertex> p_vertices) = 0;
 	void SetTexture(IImageResource* p_texture) { c_imageResource = p_texture; }
 	virtual void Display() = 0;
+	virtual void DisplayMeshData() = 0;
 	
 
 protected:

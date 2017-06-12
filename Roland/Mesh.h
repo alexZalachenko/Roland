@@ -13,6 +13,7 @@ public:
 	IMeshResource* GetMeshResource() { return c_meshResource; }
 	void SetTexture(Image* p_texture);
 	ModelMatrix* c_modelMatrix;
+	void DisplayMeshData();
 
 private:
 	IMeshResource* c_meshResource;

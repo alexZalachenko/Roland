@@ -33,9 +33,9 @@ void MeshResourceOpenGL::Display()
 
 	glBindVertexArray(c_vao);                        //bind the VAO
 	if (c_indices.empty())							 //are we using indexed drawing?
-		glDrawArrays(GL_TRIANGLES, 0, c_vertices.size());
+		glDrawArrays(GL_TRIANGLES, 0, c_vertices.size());	
 	else
-		glDrawElements(GL_TRIANGLES, c_indices.size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, c_indices.size(), GL_UNSIGNED_INT, 0);	
 	glBindVertexArray(0);                            //unbind the VAO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);        //unbind the EBO
 	//TODO how to unbind the texture?
@@ -80,6 +80,31 @@ void MeshResourceOpenGL::CreateMesh(std::vector<Rol::Vertex> p_vertices)
 	CreateBufferObjects();
 	glBindVertexArray(0);					 //unbind the VBO
 	glBindBuffer(GL_ARRAY_BUFFER, 0);		 //unbind the VAO
+}
+
+void MeshResourceOpenGL::DisplayMeshData()
+{
+	int t_count = 0;
+	std::cout << "Vertices:" << std::endl;
+	for (Rol::Vertex t_vertex : c_vertices)
+	{
+		std::cout << "    Vertex " << t_count << ": " << std::endl;
+		std::cout << "        position:      " << t_vertex.c_position.x << " " << t_vertex.c_position.y << " " << t_vertex.c_position.z << " " << std::endl;
+		std::cout << "        colour:        " << t_vertex.c_color.r << " " << t_vertex.c_color.g << " " << t_vertex.c_color.b << " " << t_vertex.c_color.a << std::endl;
+		std::cout << "        textureCoords: " << t_vertex.c_textureCoords.s << " " << t_vertex.c_textureCoords.t << std::endl;
+		++t_count;
+	}
+
+	t_count = 0;
+	std::cout << std::endl << "Faces vertices:";
+	for (unsigned int t_faceIndex : c_indices)
+	{
+		//print each face in a line
+		if (t_count % 3 == 0)
+			std::cout << std::endl << "    Face: " ;
+		++t_count;
+		std::cout << t_faceIndex << " ";
+	}
 }
 
 void MeshResourceOpenGL::CreateBufferObjects()

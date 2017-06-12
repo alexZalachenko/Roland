@@ -41,7 +41,7 @@ void			OpenGLEngine::SetupEngine(Rol::WindowData p_windowData)
 	CreateWindow(p_windowData);
 	InitGlew();
 	InitCallbacks();
-	GLuint t_newProgram = c_shadersManager.CreateProgram("VertexShader.txt", "FragmentShader.txt", "program01");
+	GLuint t_newProgram = c_shadersManager.CreateProgram("VertexShader.txt", "FragmentShaderTextures.txt", "program01");
 	c_shadersManager.UseProgram(t_newProgram);
 	c_modelMatrix.SetActiveProgram(t_newProgram);
 

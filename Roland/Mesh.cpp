@@ -34,3 +34,9 @@ void Mesh::SetTexture(Image* p_texture)
 	if (c_meshResource != nullptr)
 		c_meshResource->SetTexture(p_texture->GetImageResource());
 }
+
+void Mesh::DisplayMeshData()
+{
+	if (c_meshResource != nullptr)
+		c_meshResource->DisplayMeshData();
+}

@@ -4,6 +4,7 @@
 #include "Transform.h"
 #include "OpenGLEngine.h"
 #include "PerspectiveCamera.h"
+#include "FPSCamera.h"
 
 int main()
 {
@@ -12,7 +13,9 @@ int main()
 	IGraphicEngine* motorGrafico = t_roland.GetGraphicEngine();
 
 	//se crea una malla grafica con datos por programa
-	Mesh*	t_entity = motorGrafico->CreateMesh("fakeMesh.obj");
+	//Mesh*	t_entity = motorGrafico->CreateMesh("Assets/Meshes/cubeTextured.obj", "Assets/Meshes/cubeTexture.png");
+	Mesh*	t_entity = motorGrafico->CreateMesh("fakeMesh.obj", "Assets/container.jpg");
+	t_entity->DisplayMeshData();
 	Node*	entityNode = motorGrafico->CreateNode(motorGrafico->GetRootNode(), t_entity);
 
 	//se crea una transformacion para posicionar la camara
@@ -21,9 +24,10 @@ int main()
 	Node*	t_transformNode = motorGrafico->CreateNode(motorGrafico->GetRootNode(), t_transform);
 
 	//se crea una camara y se le añade la transformacion anterior
-	Camera* t_camera = motorGrafico->CreatePerspectiveCamera(100, 0.1f, 45, 800, 600);
-	Node*	t_cameraNode = motorGrafico->CreateNode(t_transformNode, t_camera);
-	motorGrafico->SetActiveCamera(t_cameraNode);
+	//Camera* t_camera = motorGrafico->CreatePerspectiveCamera(100, 0.1f, 45, 800, 600);
+	//FPSCamera* t_camera = motorGrafico->CreateFPSCamera(100, 0.1f, 45, 800, 600);
+	//Node*	t_cameraNode = motorGrafico->CreateNode(t_transformNode, t_camera);
+	//motorGrafico->SetActiveCamera(t_cameraNode);
 
 	//se inicia el bucle de juego
 	motorGrafico->StartLoop();

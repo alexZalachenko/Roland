@@ -36,11 +36,28 @@ namespace Rol
 		{
 			c_textureCoords = glm::vec2(0, 0);
 		}
+		Vertex(glm::vec3 p_position, glm::vec2 p_textureCoords)
+			:c_position(p_position),
+			 c_textureCoords(p_textureCoords)
+		{
+			c_color = glm::vec4(1, 1, 1, 1);
+		}
 		Vertex(glm::vec3 p_position, glm::vec4 p_color, glm::vec2 p_textureCoords)
 			:c_position(p_position),
 			 c_color(p_color),
 			 c_textureCoords(p_textureCoords)
 		{
+		}
+
+		//redefine == operator
+		bool operator==(const Vertex& t_vertex) {
+			if (	c_position		== t_vertex.c_position
+				&&	c_color			== t_vertex.c_color
+				&&	c_textureCoords == t_vertex.c_textureCoords)
+			{
+				return true;
+			}
+			return false;
 		}
 
 		glm::vec3 c_position;
