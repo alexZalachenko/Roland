@@ -288,5 +288,7 @@ void			OpenGLEngine::Draw()
 			posicionar y activar la luz en la librería gráfica*/
 	}
 
+	c_modelMatrix.Reset();
 	c_rootNode.Draw();
+	glBindTexture(GL_TEXTURE_2D, 0);
 }

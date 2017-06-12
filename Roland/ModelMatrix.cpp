@@ -31,6 +31,7 @@ void ModelMatrix::PopMatrix()
 void ModelMatrix::Reset()
 {
 	c_transformations.clear();
+	ModelMatrixToShader();
 }
 
 glm::mat4 ModelMatrix::CalculateModelMatrix()

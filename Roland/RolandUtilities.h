@@ -64,14 +64,4 @@ namespace Rol
 		glm::vec4 c_color;
 		glm::vec2 c_textureCoords;
 	};
-
-	struct Object
-	{
-		std::string c_name;
-		std::vector<unsigned int> c_facesIndex;
-		Object(std::string p_name)
-			:c_name(p_name)
-		{
-		}
-	};
 }

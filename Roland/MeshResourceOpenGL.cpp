@@ -32,13 +32,16 @@ void MeshResourceOpenGL::Display()
 		c_imageResource->Display();
 
 	glBindVertexArray(c_vao);                        //bind the VAO
-	if (c_indices.empty())							 //are we using indexed drawing?
+	if (c_indices.empty())		
+		//not using indexed drawing
 		glDrawArrays(GL_TRIANGLES, 0, c_vertices.size());	
 	else
+		//using indexed drawing
 		glDrawElements(GL_TRIANGLES, c_indices.size(), GL_UNSIGNED_INT, 0);	
 	glBindVertexArray(0);                            //unbind the VAO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);        //unbind the EBO
-	//TODO how to unbind the texture?
+	//unbind the texture
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void MeshResourceOpenGL::CreateMesh(std::string p_name, std::vector<Rol::Vertex> p_vertices, std::vector<unsigned int> p_indices)
@@ -105,6 +108,11 @@ void MeshResourceOpenGL::DisplayMeshData()
 		++t_count;
 		std::cout << t_faceIndex << " ";
 	}
+	std::cout << std::endl << "Has texture? ";
+	if (c_imageResource != nullptr)
+		std::cout << "Yes";
+	else
+		std::cout << "No";
 }
 
 void MeshResourceOpenGL::CreateBufferObjects()
@@ -120,9 +128,10 @@ void MeshResourceOpenGL::CreateBufferObjects()
 
 	//set vertex attributes pointers
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Rol::Vertex), (void*)0); //position 
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Rol::Vertex), (void*)12);//color
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Rol::Vertex), (void*)24);//texture
+	
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Rol::Vertex), (void*)0);										 //position 
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Rol::Vertex), (void*) sizeof(glm::vec3));					 //color
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Rol::Vertex), (void*)(sizeof(glm::vec4) + sizeof(glm::vec3)));//texture
 }
