@@ -1,6 +1,7 @@
 #pragma once
 #include "IEntity.h"
 #include <glm\glm.hpp>	
+#include <string>
 class ModelMatrix;
 
 class Transform : public IEntity
@@ -16,6 +17,7 @@ public:
 	void Rotate(float p_rotation, float p_rotationX, float p_rotationY, float p_rotationZ);
 	void Scale(float p_scaleX, float p_scaleY, float p_scaleZ);
 	void SetIdentity();
+	void DisplayEntityData(std::string p_tab) override;
 
 private:
 	glm::mat4 c_matrix;

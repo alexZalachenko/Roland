@@ -54,9 +54,6 @@
     <ClCompile Include="OpenGLEngine.cpp">
       <Filter>Archivos de código fuente\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="VertexShader.txt">
-      <Filter>Archivos de código fuente\Shaders</Filter>
-    </ClCompile>
     <ClCompile Include="Roland.cpp">
       <Filter>Archivos de código fuente\Roland</Filter>
     </ClCompile>
@@ -77,9 +74,6 @@
     </ClCompile>
     <ClCompile Include="ResourcesManager.cpp">
       <Filter>Archivos de código fuente\Roland\ResourcesManager</Filter>
-    </ClCompile>
-    <ClCompile Include="FragmentShader.txt">
-      <Filter>Archivos de código fuente\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="IResource.cpp">
       <Filter>Archivos de código fuente\Roland\ResourcesManager</Filter>
@@ -108,11 +102,11 @@
     <ClCompile Include="ModelMatrix.cpp">
       <Filter>Archivos de código fuente\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="FPSCamera.cpp">
-      <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
     <ClCompile Include="InputHandler.cpp">
       <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="FPSCamera.cpp">
+      <Filter>Archivos de código fuente\Roland\SceneTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -188,21 +182,27 @@
     <ClInclude Include="ModelMatrix.h">
       <Filter>Archivos de encabezado\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="FPSCamera.h">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="IInputReceiverEntity.h">
+      <Filter>Archivos de encabezado\Others</Filter>
     </ClInclude>
     <ClInclude Include="InputHandler.h">
-      <Filter>Archivos de encabezado</Filter>
+      <Filter>Archivos de encabezado\Others</Filter>
     </ClInclude>
-    <ClInclude Include="IInputReceiverEntity.h">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="FPSCamera.h">
+      <Filter>Archivos de encabezado\Roland\SceneTree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="FragmentShaderTextures.txt">
+    <Text Include="Assets\Shaders\FragmentShader.txt">
+      <Filter>Archivos de código fuente\Shaders</Filter>
+    </Text>
+    <Text Include="Assets\Shaders\FragmentShaderTextures.txt">
+      <Filter>Archivos de código fuente\Shaders</Filter>
+    </Text>
+    <Text Include="Assets\Shaders\VertexShader.txt">
       <Filter>Archivos de código fuente\Shaders</Filter>
     </Text>
   </ItemGroup>

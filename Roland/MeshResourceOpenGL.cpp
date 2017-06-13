@@ -44,6 +44,37 @@ void MeshResourceOpenGL::Display()
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void MeshResourceOpenGL::DisplayResourceData(std::string p_tab)
+{
+	std::cout << p_tab << "Mesh name: " << c_name << std::endl;
+	int t_count = 0;
+	std::cout << p_tab << "Vertices:" << std::endl;
+	for (Rol::Vertex t_vertex : c_vertices)
+	{
+		std::cout << p_tab << "    Vertex " << t_count << ": " << std::endl;
+		std::cout << p_tab << "        position:      " << t_vertex.c_position.x << " " << t_vertex.c_position.y << " " << t_vertex.c_position.z << " " << std::endl;
+		std::cout << p_tab << "        colour:        " << t_vertex.c_color.r << " " << t_vertex.c_color.g << " " << t_vertex.c_color.b << " " << t_vertex.c_color.a << std::endl;
+		std::cout << p_tab << "        textureCoords: " << t_vertex.c_textureCoords.s << " " << t_vertex.c_textureCoords.t << std::endl;
+		++t_count;
+	}
+
+	t_count = 0;
+	std::cout << std::endl << p_tab << "Faces vertices:";
+	for (unsigned int t_faceIndex : c_indices)
+	{
+		//print each face in a line
+		if (t_count % 3 == 0)
+			std::cout << std::endl << p_tab << "    Face: ";
+		++t_count;
+		std::cout << t_faceIndex << " ";
+	}
+	std::cout << std::endl << p_tab << "Has texture? ";
+	if (c_imageResource != nullptr)
+		std::cout << "Yes: " << c_imageResource->GetName();
+	else
+		std::cout << "No";
+}
+
 void MeshResourceOpenGL::CreateMesh(std::string p_name, std::vector<Rol::Vertex> p_vertices, std::vector<unsigned int> p_indices)
 {
 	c_vertices = p_vertices;
@@ -83,36 +114,6 @@ void MeshResourceOpenGL::CreateMesh(std::vector<Rol::Vertex> p_vertices)
 	CreateBufferObjects();
 	glBindVertexArray(0);					 //unbind the VBO
 	glBindBuffer(GL_ARRAY_BUFFER, 0);		 //unbind the VAO
-}
-
-void MeshResourceOpenGL::DisplayMeshData()
-{
-	int t_count = 0;
-	std::cout << "Vertices:" << std::endl;
-	for (Rol::Vertex t_vertex : c_vertices)
-	{
-		std::cout << "    Vertex " << t_count << ": " << std::endl;
-		std::cout << "        position:      " << t_vertex.c_position.x << " " << t_vertex.c_position.y << " " << t_vertex.c_position.z << " " << std::endl;
-		std::cout << "        colour:        " << t_vertex.c_color.r << " " << t_vertex.c_color.g << " " << t_vertex.c_color.b << " " << t_vertex.c_color.a << std::endl;
-		std::cout << "        textureCoords: " << t_vertex.c_textureCoords.s << " " << t_vertex.c_textureCoords.t << std::endl;
-		++t_count;
-	}
-
-	t_count = 0;
-	std::cout << std::endl << "Faces vertices:";
-	for (unsigned int t_faceIndex : c_indices)
-	{
-		//print each face in a line
-		if (t_count % 3 == 0)
-			std::cout << std::endl << "    Face: " ;
-		++t_count;
-		std::cout << t_faceIndex << " ";
-	}
-	std::cout << std::endl << "Has texture? ";
-	if (c_imageResource != nullptr)
-		std::cout << "Yes";
-	else
-		std::cout << "No";
 }
 
 void MeshResourceOpenGL::CreateBufferObjects()

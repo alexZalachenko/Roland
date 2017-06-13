@@ -76,10 +76,6 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="FPSCamera.cpp" />
-    <ClCompile Include="FragmentShader.txt">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageResourceOpenGL.cpp" />
     <ClCompile Include="InputHandler.cpp" />
@@ -98,10 +94,6 @@
     <ClCompile Include="Roland.cpp" />
     <ClCompile Include="ShadersManager.cpp" />
     <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="VertexShader.txt">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -136,9 +128,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="FragmentShaderTextures.txt">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </Text>
+    <Text Include="Assets\Shaders\FragmentShader.txt" />
+    <Text Include="Assets\Shaders\FragmentShaderTextures.txt" />
+    <Text Include="Assets\Shaders\VertexShader.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

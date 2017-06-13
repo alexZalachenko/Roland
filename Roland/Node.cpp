@@ -1,5 +1,7 @@
 #include "Node.h"
 #include "IEntity.h"
+#include <iostream>
+#include <string>
 
 Node::Node()
 	:c_father(nullptr),
@@ -29,7 +31,6 @@ Node::~Node()
 		t_node->c_removeFromFather = false;
 		delete t_node;
 	}
-		
 }
 
 int Node::AddChildren(Node* p_children)
@@ -105,4 +106,30 @@ Node * Node::GetRoot()
 		return c_father->GetRoot();
 	else
 		return this;
+}
+
+int Node::DisplayNodeInfo(int p_nodeCount, std::string p_tab)
+{
+	++p_nodeCount;
+	p_tab += "    ";
+	std::cout << p_tab << "Node " << p_nodeCount << " has : " << c_children.size() << " children" << std::endl;
+	std::cout << p_tab << "Node " << p_nodeCount << " has ";
+	if (c_IEntity == nullptr)
+		std::cout << "no ";
+	else
+	{
+		std::cout << "attached entity" << std::endl;
+		c_IEntity->DisplayEntityData(p_tab);
+	}
+	if (c_children.size() != 0)
+	{
+		std::cout << p_tab << "Children data: " << std::endl;
+		std::cout << p_tab << "-----------------------------------" << std::endl;
+		for (Node* t_child : c_children)
+		{
+			p_nodeCount = t_child->DisplayNodeInfo(p_nodeCount, p_tab);
+			std::cout << std::endl;
+		}
+	}
+	return p_nodeCount;
 }

@@ -16,7 +16,7 @@ public:
 		return glm::mat4();
 	}
 
-private:
+protected:
 	glm::mat4 c_projectionMatrix;
 };
 

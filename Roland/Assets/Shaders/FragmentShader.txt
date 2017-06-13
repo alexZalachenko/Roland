@@ -1,0 +1,14 @@
+#version 330 core
+ 
+in vec4 color;
+in vec2 textCoord;
+
+out vec4 out_color;
+
+uniform sampler2D ourTexture;
+ 
+void main()
+{
+  out_color = color;
+  //out_color = texture(ourTexture, textCoord);
+}

@@ -17,6 +17,7 @@ public:
 	int			RemoveChildren(Node* p_children);
 	void		Draw();
 	Node*		GetRoot();
+	int			DisplayNodeInfo(int p_nodeCount, std::string p_tab);
 
 private:
 	IEntity* c_IEntity;

@@ -20,6 +20,8 @@ GLuint	ShadersManager::CreateProgram(std::string p_vertexShaderFile, std::string
 	//compile both shaders
 	GLuint t_compiledVertexShader   = CompileShader(p_vertexShaderFile, GL_VERTEX_SHADER);
 	GLuint t_compiledFragmentShader = CompileShader(p_fragmentShaderFile, GL_FRAGMENT_SHADER);
+	if (t_compiledFragmentShader == -1 || t_compiledVertexShader == -1)
+		return -1;
 	//create a program
 	GLuint t_shaderProgram = glCreateProgram();
 	//link the compiled shaders to a program
@@ -51,7 +53,7 @@ GLuint	ShadersManager::CompileShader(std::string p_shaderFile, unsigned short p_
 	else 
 	{
 		std::cout << "Impossible to open " << p_shaderFile << std::endl;
-		return 0;
+		return -1;
 	}
 
 	char const * t_shaderCodeConverted = t_shaderCode.c_str();
@@ -66,7 +68,7 @@ GLuint	ShadersManager::CompileShader(std::string p_shaderFile, unsigned short p_
 	{
 		glGetShaderInfoLog(r_shaderID, 512, NULL, t_infoLog);//store the query info in t_infoLog
 		std::cout << "ERROR COMPILING SHADER " << p_shaderFile << " COMPILATION_FAILED. INFO LOG: " << t_infoLog << std::endl;
-		return 0;
+		return -1;
 	}
 	return r_shaderID;
 }

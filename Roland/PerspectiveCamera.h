@@ -1,5 +1,6 @@
 #pragma once
 #include "Camera.h"
+#include <string>
 
 class PerspectiveCamera : public Camera
 {
@@ -9,6 +10,7 @@ public:
 	virtual ~PerspectiveCamera();
 	void BeginDraw() override;
 	void EndDraw() override;
+	void DisplayEntityData(std::string p_tab) override;
 
 private:
 	float c_far;

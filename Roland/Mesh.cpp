@@ -2,6 +2,7 @@
 #include "IMeshResource.h"
 #include "Image.h"
 #include "ModelMatrix.h"
+#include <iostream>
 
 Mesh::Mesh(ModelMatrix* p_modelMatrix)
 	: IEntity(MeshType)
@@ -35,8 +36,9 @@ void Mesh::SetTexture(Image* p_texture)
 		c_meshResource->SetTexture(p_texture->GetImageResource());
 }
 
-void Mesh::DisplayMeshData()
+void Mesh::DisplayEntityData(std::string p_tab)
 {
+	std::cout << p_tab << "Entity type: mesh" << std::endl;
 	if (c_meshResource != nullptr)
-		c_meshResource->DisplayMeshData();
+		c_meshResource->DisplayResourceData(p_tab);
 }

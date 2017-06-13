@@ -17,10 +17,15 @@ public:
 	{
 		c_activeProgram = p_activeProgram;
 	}
+	void OnNewShaderProgram()
+	{
+		c_matrixLocation = glGetUniformLocation(c_activeProgram, "modelMatrix");
+	}
 
 private:
 	std::list<glm::mat4> c_transformations;
 	GLuint c_activeProgram;
 	glm::mat4 CalculateModelMatrix();
+	GLuint c_matrixLocation;
 };
 

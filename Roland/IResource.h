@@ -10,8 +10,9 @@ public:
 	std::string GetName();
 	void SetName(std::string p_name);
 	virtual void Display() = 0;
+	virtual void DisplayResourceData(std::string p_tab) = 0;
 
-private:
+protected:
 	std::string c_name;
 };
 

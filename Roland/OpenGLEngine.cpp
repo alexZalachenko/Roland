@@ -16,16 +16,16 @@
 #include "Image.h"
 #include <regex>
 #include "PerspectiveCamera.h"
+#include "OrthographicCamera.h"
 #include "glm\gtc\type_ptr.hpp"
 #include "FPSCamera.h"
 #include "InputHandler.h"
 
 OpenGLEngine::OpenGLEngine()
-	: c_window(nullptr),
-	IGraphicEngine(Rol::OpenGL)
+	: IGraphicEngine(Rol::OpenGL),
+	  c_window(nullptr)
 {
 	Init();
-	
 }
 
 OpenGLEngine::~OpenGLEngine()
@@ -41,10 +41,7 @@ void			OpenGLEngine::SetupEngine(Rol::WindowData p_windowData)
 	CreateWindow(p_windowData);
 	InitGlew();
 	InitCallbacks();
-	GLuint t_newProgram = c_shadersManager.CreateProgram("VertexShader.txt", "FragmentShaderTextures.txt", "program01");
-	c_shadersManager.UseProgram(t_newProgram);
-	c_modelMatrix.SetActiveProgram(t_newProgram);
-
+	CreateNewProgram("Assets/Shaders/VertexShader.txt", "Assets/Shaders/FragmentShader.txt", "defaultProgram");
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glEnable(GL_DEPTH_TEST);
 }
@@ -155,7 +152,8 @@ Camera*			OpenGLEngine::CreatePerspectiveCamera(float p_far, float p_near, float
 //user is responsible of freeing memory of the returned object
 Camera*			OpenGLEngine::CreateOrthographicCamera(float p_near, float p_far, float p_left, float p_right, float p_top, float p_bottom)
 {
-	return nullptr;
+	Camera* t_newCamera = new OrthographicCamera(p_near, p_far, p_left, p_right, p_top, p_bottom);
+	return t_newCamera;
 }
 
 //user is responsible of freeing memory of the returned object
@@ -163,6 +161,13 @@ Light*			OpenGLEngine::CreateLight()
 {
 	//TODO
 	Light* t_newLight = new Light;
+	return t_newLight;
+}
+
+//user is responsible of freeing memory of the returned object
+Light *			OpenGLEngine::CreateLight(Color p_intensity)
+{
+	Light* t_newLight = new Light(p_intensity);
 	return t_newLight;
 }
 
@@ -252,6 +257,25 @@ FPSCamera*		OpenGLEngine::CreateFPSCamera(float p_far, float p_near, float p_fov
 	return t_newFPSCamera;
 }
 
+void			OpenGLEngine::DisplayScenetreeData()
+{
+	c_rootNode.DisplayNodeInfo(-1, "");
+}
+
+void			OpenGLEngine::CreateNewProgram(std::string p_vertexShader, std::string p_fragmentShader, std::string p_programName)
+{
+	GLuint t_newProgram = c_shadersManager.CreateProgram(p_vertexShader, p_fragmentShader, p_programName);
+	if (t_newProgram == -1)
+	{
+		std::cout << "Failed to create shader program." << std::endl;
+		return;
+	}
+	c_shadersManager.UseProgram(t_newProgram);
+	c_modelMatrix.SetActiveProgram(t_newProgram);
+	c_matrixLocation = glGetUniformLocation(c_shadersManager.GetActiveProgram(), "viewMatrix");
+	c_modelMatrix.OnNewShaderProgram();
+}
+
 void			OpenGLEngine::Draw()
 {
 	//calculate viewMatrix
@@ -271,11 +295,12 @@ void			OpenGLEngine::Draw()
 		c_viewMatrix = ((Camera*)c_activeCamera->GetIEntity())->GetViewMatrix();
 		for (auto it =  t_transforms.rbegin(); it != t_transforms.rend(); it++)
 			c_viewMatrix *= (*it);
-		//c_viewMatrix = glm::inverse(c_viewMatrix); //habria que descomentar
+		c_viewMatrix = glm::inverse(c_viewMatrix);
 		
-		GLuint t_matrixLocation = glGetUniformLocation(c_shadersManager.GetActiveProgram(), "viewMatrix");
-		glUniformMatrix4fv(t_matrixLocation, 1, GL_FALSE, glm::value_ptr(c_viewMatrix));
+		glUniformMatrix4fv(c_matrixLocation, 1, GL_FALSE, glm::value_ptr(c_viewMatrix));
 	}
+	else
+		glUniformMatrix4fv(c_matrixLocation, 1, GL_FALSE, glm::value_ptr(glm::mat4(1)));
 
 	//render lights
 	for (size_t t_index = 0; t_index < c_lights.size(); ++t_index)

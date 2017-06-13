@@ -24,6 +24,7 @@ public:
 	Camera*			CreatePerspectiveCamera(float p_far, float p_near, float p_fov, float p_width, float p_height) override;
 	Camera*			CreateOrthographicCamera(float p_near, float p_far, float p_left, float p_right, float p_top, float p_bottom) override;
 	Light*			CreateLight() override;
+	Light*			CreateLight(Color p_intensity) override;
 	Mesh*			CreateMesh(std::string p_file) override;
 	Mesh*			CreateMesh(std::string p_meshFile, std::string p_textureFile) override;
 	void			DeleteMesh(std::string p_file) override;
@@ -31,15 +32,18 @@ public:
 	void			DeleteImage(std::string p_file) override;
 	void			RegisterLightNode(Node* p_lightNode) override;
 	void			SetActiveCamera(Node* p_cameraNode) override;
-	FPSCamera*		CreateFPSCamera(float p_far, float p_near, float p_fov, float p_width, float p_height);
+	FPSCamera*		CreateFPSCamera(float p_far, float p_near, float p_fov, float p_width, float p_height) override;
+	void			DisplayScenetreeData() override;
+	void			CreateNewProgram(std::string p_vertexShader, std::string p_fragmentShader, std::string p_programName) override;
 	void			Draw();
 
 private:
 	GLFWwindow*			c_window;
 	std::vector<Node*>	c_lights;
-	glm::mat4	c_projectionMatrix;
-	ModelMatrix	c_modelMatrix;
-	glm::mat4	c_viewMatrix;
+	glm::mat4			c_projectionMatrix;
+	ModelMatrix			c_modelMatrix;
+	glm::mat4			c_viewMatrix;
+	GLuint				c_matrixLocation;
 
 	void	Init();
 	void	CreateWindow(Rol::WindowData p_windowData);

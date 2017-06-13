@@ -14,6 +14,7 @@ public:
 		c_imageResource = p_imageResource;
 	}
 	IImageResource* GetImageResource() { return c_imageResource; }
+	void DisplayEntityData(std::string p_tab) override;
 
 private:
 	IImageResource* c_imageResource;

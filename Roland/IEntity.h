@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 enum EntityTypes
 {
@@ -24,6 +25,7 @@ public:
 	}
 	virtual void BeginDraw() = 0;
 	virtual void EndDraw() = 0;
+	virtual void DisplayEntityData(std::string p_tab) = 0;
 
 private :
 	EntityTypes c_entityType;

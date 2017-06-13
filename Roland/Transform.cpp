@@ -2,6 +2,7 @@
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "ModelMatrix.h"
+#include <iostream>
 
 Transform::Transform(ModelMatrix* p_modelMatrix)
 	:IEntity(TransformType),
@@ -17,6 +18,25 @@ Transform::~Transform()
 void Transform::SetIdentity()
 {
 	c_matrix = glm::mat4();//the default constructor creates a indentity matrix;
+}
+
+void Transform::DisplayEntityData(std::string p_tab)
+{
+	std::cout << p_tab << "Entity type: transform" << std::endl;
+	std::cout << p_tab << "Transform matrix: "  << std::endl;
+	std::cout << std::endl;
+	for (size_t x = 0; x < c_matrix.length(); x++)
+	{
+		std::cout << p_tab;
+		for (size_t y = 0; y < c_matrix[x].length(); y++)
+		{
+			std::cout << c_matrix[x][y] << " ";
+		}
+		if (x < c_matrix.length() - 1)
+			std::cout << std::endl;
+	}
+	std::cout << std::endl;
+	std::cout << std::endl;
 }
 	 
 void Transform::LoadMatrix(glm::mat4 p_matrix)

@@ -45,7 +45,7 @@ IResource* ResourcesLoaderOpenGL::LoadImage(std::string p_file)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, t_width, t_height, 0, GL_RGB, GL_UNSIGNED_BYTE, t_imageData);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SOIL_free_image_data(t_imageData);
-	ImageResourceOpenGL* r_newResource = new ImageResourceOpenGL(t_width, t_height, t_texture);
+	ImageResourceOpenGL* r_newResource = new ImageResourceOpenGL(p_file, t_width, t_height, t_texture);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	return r_newResource;
 }
@@ -68,7 +68,7 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 {
 	std::vector<Rol::Vertex> t_vertices;
 	std::vector<unsigned int> t_facesIndex;
-	MeshResourceOpenGL* t_newMeshResource = new MeshResourceOpenGL();
+	MeshResourceOpenGL* t_newMeshResource = new MeshResourceOpenGL(p_file);
 
 	if (p_file == "fakeMesh.obj")
 	{
@@ -329,7 +329,12 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 				}
 			}
 			else
-				std::cout << "Unsupported mesh format. Please assure that mesh has been triangulated" << std::endl;
+			{
+				std::cout << "Unsupported mesh format. Please assure that mesh has been triangulated." << std::endl;
+				t_fileReader.close();
+				return nullptr;
+			}
+				
 		}
 	}
 	t_fileReader.close();

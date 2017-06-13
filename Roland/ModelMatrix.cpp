@@ -14,8 +14,7 @@ ModelMatrix::~ModelMatrix()
 void ModelMatrix::ModelMatrixToShader()
 {
 	glm::mat4 t_modelMatrix = CalculateModelMatrix();
-	GLuint t_matrixLocation = glGetUniformLocation(c_activeProgram, "modelMatrix");
-	glUniformMatrix4fv(t_matrixLocation, 1, GL_FALSE, glm::value_ptr(t_modelMatrix));
+	glUniformMatrix4fv(c_matrixLocation, 1, GL_FALSE, glm::value_ptr(t_modelMatrix));
 }
 
 void ModelMatrix::PushMatrix(glm::mat4 p_matrix)

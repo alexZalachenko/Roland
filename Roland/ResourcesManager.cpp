@@ -51,7 +51,7 @@ IResource* ResourcesManager::LoadFile(std::string p_file)
 
 	//check if the file existed
 	if (t_loadedResource == nullptr)
-		std::cout << "Error. File " << p_file << " not found" << std::endl;
+		std::cout << "Error. Resource " << p_file << " could not be loaded" << std::endl;
 	else
 		c_resources.push_back(t_loadedResource);
 	return t_loadedResource;

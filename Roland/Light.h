@@ -1,5 +1,6 @@
 #pragma once
 #include "IEntity.h"
+#include <string>
 
 struct Color
 {
@@ -45,11 +46,13 @@ class Light : public IEntity
 {
 public:
 	Light();
+	Light(Color p_color);
 	~Light();
 	void SeIntensity(Color p_color);
 	Color GetIntensity();
 	bool GetIsActive();
 	void SetIsActive(bool p_isActive);
+	void DisplayEntityData(std::string p_tab) override;
 
 private:
 	Color c_intensity;
