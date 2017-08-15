@@ -3,11 +3,14 @@
 #include "Image.h"
 #include "ModelMatrix.h"
 #include <iostream>
+#include "ShadersManager.h"
 
-Mesh::Mesh(ModelMatrix* p_modelMatrix)
+Mesh::Mesh(ModelMatrix* p_modelMatrix, ShadersManager* p_shadersManager)
 	: IEntity(MeshType)
 	, c_modelMatrix(p_modelMatrix)
+	, c_shadersManager(p_shadersManager)
 {
+	c_isTextureLocation = glGetUniformLocation(c_shadersManager->GetActiveProgram(), "isTextured");
 }
 
 Mesh::~Mesh()
@@ -21,6 +24,10 @@ void Mesh::BeginDraw()
 	if (c_meshResource != nullptr)
 	{
 		c_modelMatrix->ModelMatrixToShader();
+		if (c_meshResource->GetImageResource() != nullptr && c_isTextureLocation != 0)
+			glUniform1i(c_isTextureLocation, 1);
+		else
+			glUniform1i(c_isTextureLocation, 0);
 		c_meshResource->Display();
 	}
 }

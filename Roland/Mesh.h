@@ -3,11 +3,12 @@
 class IMeshResource;
 class Image;
 class ModelMatrix;
+class ShadersManager;
 
 class Mesh : public IEntity
 {
 public:
-	Mesh(ModelMatrix* p_modelMatrix);
+	Mesh(ModelMatrix* p_modelMatrix, ShadersManager* p_shadersManager);
 	~Mesh();
 	void SetMeshResource(IMeshResource* p_meshResource) { c_meshResource = p_meshResource; }
 	IMeshResource* GetMeshResource() { return c_meshResource; }
@@ -17,7 +18,9 @@ public:
 
 private:
 	IMeshResource* c_meshResource;
+	ShadersManager* c_shadersManager;
 	void BeginDraw();
 	void EndDraw();
+	unsigned int c_isTextureLocation;
 };
 

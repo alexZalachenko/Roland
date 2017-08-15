@@ -25,11 +25,17 @@ public:
 	virtual void CreateMesh(std::vector<Rol::Vertex> p_vertices, std::vector<unsigned int> p_indices) = 0;
 	virtual void CreateMesh(std::vector<Rol::Vertex> p_vertices) = 0;
 	void SetTexture(IImageResource* p_texture) { c_imageResource = p_texture; }
+	IImageResource* GetImageResource() { return c_imageResource; }
 	virtual void Display() = 0;
+	virtual void SetColors(glm::vec3 p_diffuseColor, glm::vec3 p_ambientColor, glm::vec3 p_specularColor, float p_specularComponent) = 0;
 
 protected:
 	std::vector<Rol::Vertex> c_vertices;
 	std::vector<unsigned int> c_indices;
 	IImageResource* c_imageResource;
+	glm::vec3 c_diffuseColor;
+	glm::vec3 c_ambientColor;
+	glm::vec3 c_specularColor;
+	float c_specularExponent;
 };
 

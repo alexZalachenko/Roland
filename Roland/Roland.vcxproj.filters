@@ -205,5 +205,14 @@
     <Text Include="Assets\Shaders\VertexShader.txt">
       <Filter>Archivos de código fuente\Shaders</Filter>
     </Text>
+    <Text Include="Assets\Shaders\SimpleVertexShader.txt">
+      <Filter>Archivos de código fuente\Shaders</Filter>
+    </Text>
+    <Text Include="Assets\Shaders\VertexShaderAdvancedLightning.txt">
+      <Filter>Archivos de código fuente\Shaders</Filter>
+    </Text>
+    <Text Include="Assets\Shaders\FragmentShaderAdvancedLightning.txt">
+      <Filter>Archivos de código fuente\Shaders</Filter>
+    </Text>
   </ItemGroup>
 </Project>

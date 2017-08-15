@@ -27,6 +27,8 @@ MeshResourceOpenGL::~MeshResourceOpenGL()
 
 void MeshResourceOpenGL::Display()
 {
+	//set material
+
 	//does the mesh has a texture?
 	if (c_imageResource != nullptr)
 		c_imageResource->Display();
@@ -52,9 +54,10 @@ void MeshResourceOpenGL::DisplayResourceData(std::string p_tab)
 	for (Rol::Vertex t_vertex : c_vertices)
 	{
 		std::cout << p_tab << "    Vertex " << t_count << ": " << std::endl;
-		std::cout << p_tab << "        position:      " << t_vertex.c_position.x << " " << t_vertex.c_position.y << " " << t_vertex.c_position.z << " " << std::endl;
-		std::cout << p_tab << "        colour:        " << t_vertex.c_color.r << " " << t_vertex.c_color.g << " " << t_vertex.c_color.b << " " << t_vertex.c_color.a << std::endl;
-		std::cout << p_tab << "        textureCoords: " << t_vertex.c_textureCoords.s << " " << t_vertex.c_textureCoords.t << std::endl;
+		std::cout << p_tab << "        position:      " << t_vertex.c_position.x		<< " " << t_vertex.c_position.y		 << " "  << t_vertex.c_position.z << " " << std::endl;
+		std::cout << p_tab << "        colour:        " << t_vertex.c_color.r			<< " " << t_vertex.c_color.g		 << " "  << t_vertex.c_color.b	  << " " << t_vertex.c_color.a << std::endl;
+		std::cout << p_tab << "        textureCoords: " << t_vertex.c_textureCoords.s	<< " " << t_vertex.c_textureCoords.t << std::endl;
+		std::cout << p_tab << "        normal:        "	<< t_vertex.c_normal.x			<< " " << t_vertex.c_normal.y		 << " "  << t_vertex.c_normal.z	  << " " << std::endl;
 		++t_count;
 	}
 
@@ -70,9 +73,23 @@ void MeshResourceOpenGL::DisplayResourceData(std::string p_tab)
 	}
 	std::cout << std::endl << p_tab << "Has texture? ";
 	if (c_imageResource != nullptr)
-		std::cout << "Yes: " << c_imageResource->GetName();
+		std::cout << "Yes: " << c_imageResource->GetName() << std::endl << std::endl;
 	else
-		std::cout << "No";
+		std::cout << "No" << std::endl << std::endl;
+
+	std::cout << p_tab << "Material data:" << std::endl;
+	std::cout << p_tab << "Ambient color:     " << c_ambientColor.r << " " << c_ambientColor.g << " " << c_ambientColor.b << std::endl;
+	std::cout << p_tab << "Diffuse color:     " << c_diffuseColor.r << " " << c_diffuseColor.g << " " << c_diffuseColor.b << std::endl;
+	std::cout << p_tab << "Specular color:    " << c_specularColor.r << " " << c_specularColor.g << " " << c_specularColor.b << std::endl;
+	std::cout << p_tab << "Specular exponent: " << c_specularExponent << std::endl;
+}
+
+void MeshResourceOpenGL::SetColors(glm::vec3 p_diffuseColor, glm::vec3 p_ambientColor, glm::vec3 p_specularColor, float p_specularComponent)
+{
+	c_diffuseColor		= p_diffuseColor;
+	c_ambientColor		= p_ambientColor;
+	c_specularColor		= p_specularColor;
+	c_specularExponent	= p_specularComponent;
 }
 
 void MeshResourceOpenGL::CreateMesh(std::string p_name, std::vector<Rol::Vertex> p_vertices, std::vector<unsigned int> p_indices)
@@ -130,9 +147,11 @@ void MeshResourceOpenGL::CreateBufferObjects()
 	//set vertex attributes pointers
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(2); 
+	glEnableVertexAttribArray(3);
 	
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Rol::Vertex), (void*)0);										 //position 
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Rol::Vertex), (void*) sizeof(glm::vec3));					 //color
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Rol::Vertex), (void*)(sizeof(glm::vec4) + sizeof(glm::vec3)));//texture
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Rol::Vertex), (void*)0);															 //position 
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Rol::Vertex), (void*) sizeof(glm::vec3));										 //color
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Rol::Vertex), (void*)(sizeof(glm::vec4) + sizeof(glm::vec3)));					 //texture
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Rol::Vertex), (void*)(sizeof(glm::vec4) + sizeof(glm::vec3) + sizeof(glm::vec2)));//normal
 }

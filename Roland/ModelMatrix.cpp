@@ -14,7 +14,7 @@ ModelMatrix::~ModelMatrix()
 void ModelMatrix::ModelMatrixToShader()
 {
 	glm::mat4 t_modelMatrix = CalculateModelMatrix();
-	glUniformMatrix4fv(c_matrixLocation, 1, GL_FALSE, glm::value_ptr(t_modelMatrix));
+	glUniformMatrix4fv(c_modelMatrixLocation, 1, GL_FALSE, glm::value_ptr(t_modelMatrix));
 }
 
 void ModelMatrix::PushMatrix(glm::mat4 p_matrix)
@@ -30,7 +30,7 @@ void ModelMatrix::PopMatrix()
 void ModelMatrix::Reset()
 {
 	c_transformations.clear();
-	ModelMatrixToShader();
+	glUniformMatrix4fv(c_modelMatrixLocation, 1, GL_FALSE, glm::value_ptr(glm::mat4(1))); //ModelMatrixToShader();
 }
 
 glm::mat4 ModelMatrix::CalculateModelMatrix()

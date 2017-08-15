@@ -54,7 +54,7 @@ void  SplitString(std::string t_line, std::string t_delimiter, std::string* t_pa
 {
 	std::string t_token;
 	size_t t_position;
-	//take the three values
+	//take the desired number of values
 	for (size_t t_element = 0; t_element < t_elements; t_element++)
 	{
 		t_position = t_line.find(t_delimiter);
@@ -104,7 +104,11 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 	}
 	
 	//read the .mtl file 
-	glm::vec4 t_color = glm::vec4(1,1,1,1);
+	glm::vec4 t_ambientColor  = glm::vec4(1,1,1,1);
+	glm::vec3 t_diffuseColor  = glm::vec3(1, 1, 1);
+	glm::vec3 t_specularColor = glm::vec3(1, 1, 1);
+	float	  t_specularExponent = 1;
+	//glm::vec3 t_color;
 	std::string t_mtlFile = p_file;
 	t_mtlFile[t_mtlFile.size() - 3] = 'm'; 
 	t_mtlFile[t_mtlFile.size() - 2] = 't'; 
@@ -123,14 +127,44 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 				//get the color values
 				std::string t_values[3];
 				SplitString(t_line, " ", t_values, 3);
-				t_color = glm::vec4(std::stof(t_values[0]), std::stof(t_values[1]), std::stof(t_values[2]), 1);
+				t_diffuseColor = glm::vec3(std::stof(t_values[0]), std::stof(t_values[1]), std::stof(t_values[2]));
 			}
+			//ambient color
+			if (t_line[0] == 'K' && t_line[1] == 'a')
+			{
+				//delete first three characters "Ka "
+				t_line.erase(0, 3);
+				//get the color values
+				std::string t_values[3];
+				SplitString(t_line, " ", t_values, 3);
+				t_ambientColor = glm::vec4(std::stof(t_values[0]), std::stof(t_values[1]), std::stof(t_values[2]), 1);
+			}
+			//specular color
+			if (t_line[0] == 'K' && t_line[1] == 's')
+			{
+				//delete first three characters "Ks "
+				t_line.erase(0, 3);
+				//get the color values
+				std::string t_values[3];
+				SplitString(t_line, " ", t_values, 3);
+				t_specularColor = glm::vec3(std::stof(t_values[0]), std::stof(t_values[1]), std::stof(t_values[2]));
+			}
+			//specular exponent
+			if (t_line[0] == 'N' && t_line[1] == 'i')
+			{
+				//delete first three characters "Ns "
+				t_line.erase(0, 3);
+				//get the color values
+				std::string t_values[1];
+				SplitString(t_line, " ", t_values, 1);
+				t_specularExponent = std::stof(t_values[0]);
+			}
+			//alpha value
 			if (t_line[0] == 'd')
 			{
-				//get the alpha value
 				//delete first two characters "d "
 				t_line.erase(0, 2);
-				t_color.a = std::stof(t_line);
+				t_ambientColor.a = std::stof(t_line);
 			}
 		}
 	}
@@ -144,6 +178,7 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 		return nullptr;
 
 	std::vector<glm::vec3> t_verticesPositions;
+	std::vector<glm::vec3> t_normals;
 	std::vector<glm::vec2> t_verticesTextureCoords;
 	while (std::getline(t_fileReader, t_line))
 	{
@@ -170,7 +205,12 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 		//vertex normal
 		else if (t_line[0] == 'v' && t_line[1] == 'n')
 		{
-			//pa que?
+			//delete first three characters "vn "
+			t_line.erase(0, 3);
+			//split the line into the three vertex positions and store it
+			std::string t_parts[3];
+			SplitString(t_line, " ", t_parts, 3);
+			t_normals.push_back(glm::vec3(std::stof(t_parts[0]), std::stof(t_parts[1]), std::stof(t_parts[2])));
 		}
 		//face
 		else if (t_line[0] == 'f')
@@ -205,7 +245,7 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 					t_facesIndex.push_back(std::atoi(t_parts[2].c_str()) - 1);
 				} while (std::getline(t_fileReader, t_line));
 				for (glm::vec3 t_position : t_verticesPositions)
-					t_vertices.push_back(Rol::Vertex(t_position, t_color));
+					t_vertices.push_back(Rol::Vertex(t_position, t_diffuseColor));
 				break;
 			}
 			//f v1/vt1 v2/vt2 v3/vt3 --> vertex positions and texture coordinates 
@@ -228,7 +268,7 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 						{
 							Rol::Vertex t_newVertex(
 								t_verticesPositions[std::atoi(t_parts[0].c_str())],
-								t_color,
+								t_diffuseColor,
 								t_verticesTextureCoords[std::atoi(t_parts[1].c_str())]
 							);
 							//search for the vertex in the vertex list
@@ -261,8 +301,6 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 				{
 					//the face is --> f v1//vn1 v2//vn2 v3//vn3 vertex positions and vertex normals
 					//read the rest of the file from here so checking the type of face is not needed again
-
-					//TODO que hago con las normales?
 					std::string t_parts[3];
 					std::string t_partsAux[2];
 					//read the rest of the file from here so checking the type of face is not needed again
@@ -276,11 +314,32 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 						{
 							//split each vertex into vertex position and vertex normal
 							SplitString(t_vertex, "//", t_partsAux, 2);
-							t_facesIndex.push_back(std::atoi(t_partsAux[0].c_str()) - 1);
+
+							Rol::Vertex t_newVertex(
+								t_verticesPositions[std::atoi(t_partsAux[0].c_str()) - 1],
+								t_diffuseColor,
+								t_normals[std::atoi(t_partsAux[1].c_str()) - 1]
+							);
+							//search for the vertex in the vertex list
+							int t_index = 0;
+							for (Rol::Vertex t_vertex : t_vertices)
+							{
+								//the vertex is already in the list
+								if (t_vertex == t_newVertex)
+								{
+									t_facesIndex.push_back(t_index);
+									break;
+								}
+								++t_index;
+							}
+							if (t_index == t_vertices.size())
+							{
+								//the vertex was not in the list
+								t_vertices.push_back(t_newVertex);
+								t_facesIndex.push_back(t_index);
+							}
 						}
 					} while (std::getline(t_fileReader, t_line));
-					for (glm::vec3 t_position : t_verticesPositions)
-						t_vertices.push_back(Rol::Vertex(t_position, t_color));
 					break;
 				}
 				else
@@ -299,10 +358,11 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 						//parse each vertex info
 						for (std::string t_part : t_parts)
 						{
-							SplitString(t_part, "/", t_partsAux, 3);//TODO el tercer elemento son las normales. que hago?
+							SplitString(t_part, "/", t_partsAux, 3);
 							Rol::Vertex t_newVertex(
 								t_verticesPositions[std::atoi(t_partsAux[0].c_str()) - 1],
-								t_color,
+								t_diffuseColor,
+								t_normals[std::atoi(t_partsAux[2].c_str()) - 1],
 								t_verticesTextureCoords[std::atoi(t_partsAux[1].c_str()) - 1]
 							);
 							//search for the vertex in the vertex list
@@ -334,10 +394,10 @@ IResource* ResourcesLoaderOpenGL::LoadMesh(std::string p_file)
 				t_fileReader.close();
 				return nullptr;
 			}
-				
 		}
 	}
 	t_fileReader.close();
 	t_newMeshResource->CreateMesh(t_vertices, t_facesIndex);
+	t_newMeshResource->SetColors(t_diffuseColor, t_ambientColor, t_specularColor, t_specularExponent);
 	return t_newMeshResource;
 }

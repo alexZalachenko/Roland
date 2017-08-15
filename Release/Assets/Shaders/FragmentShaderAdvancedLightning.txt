@@ -1,0 +1,37 @@
+#version 330 core
+ 
+in vec4 color;
+in vec2 textCoord;
+in vec3 normal;
+in vec3 fragmentPosition;
+
+out vec4 out_color;
+
+uniform sampler2D	ourTexture;
+uniform vec3		lightPosition;
+uniform vec3		ambientLightColor; 
+uniform float		ambientStrength; 
+uniform vec3		lightColor; 
+uniform vec3		viewerPosition;
+uniform bool		isTextured;
+ 
+void main()
+{
+	vec3  normalized		  = normalize(normal);
+	vec3  lightDirection	  = normalize(lightPosition - fragmentPosition);  
+	float diffuseStrength	  = max(dot(normal, lightDirection), 0.0);
+							 
+	float specularModifier    = 0.7f;
+	vec3  viewDirection		  = normalize(viewerPosition - fragmentPosition);
+	vec3  reflectionDirection = reflect(-lightDirection, normal);
+	float specularComponent	  = pow(max(dot(viewDirection, reflectionDirection), 0.0), 32);
+
+	vec4  ambient			  = color * (vec4(ambientLightColor, 1.0) * ambientStrength);
+	vec4  diffuse			  = vec4(diffuseStrength * lightColor, 1.0);
+	vec4  specular			  = vec4(specularModifier * specularComponent * lightColor, 1.0);
+	
+	if(isTextured)
+		out_color				  = texture(ourTexture, textCoord);
+	else
+		out_color				  = (ambient + diffuse + specular) * color;
+}

@@ -30,9 +30,9 @@ namespace Rol
 			c_color			= glm::vec4(1, 1, 1, 1);
 			c_textureCoords = glm::vec2(0, 0);
 		}
-		Vertex(glm::vec3 p_position, glm::vec4 p_color)
+		Vertex(glm::vec3 p_position, glm::vec3 p_color)
 			:c_position(p_position),
-			 c_color(p_color)
+			 c_color(p_color, 1)
 		{
 			c_textureCoords = glm::vec2(0, 0);
 		}
@@ -42,9 +42,22 @@ namespace Rol
 		{
 			c_color = glm::vec4(1, 1, 1, 1);
 		}
-		Vertex(glm::vec3 p_position, glm::vec4 p_color, glm::vec2 p_textureCoords)
+		Vertex(glm::vec3 p_position, glm::vec3 p_color, glm::vec2 p_textureCoords)
 			:c_position(p_position),
-			 c_color(p_color),
+			 c_color(p_color, 1),
+			 c_textureCoords(p_textureCoords)
+		{
+		}
+		Vertex(glm::vec3 p_position, glm::vec3 p_color, glm::vec3 p_normal)
+			:c_position(p_position),
+			 c_color(p_color, 1),
+			 c_normal(p_normal)
+		{
+		}
+		Vertex(glm::vec3 p_position, glm::vec3 p_color, glm::vec3 p_normal, glm::vec2 p_textureCoords)
+			:c_position(p_position),
+			 c_color(p_color, 1),
+			 c_normal(p_normal),
 			 c_textureCoords(p_textureCoords)
 		{
 		}
@@ -53,7 +66,8 @@ namespace Rol
 		bool operator==(const Vertex& t_vertex) {
 			if (	c_position		== t_vertex.c_position
 				&&	c_color			== t_vertex.c_color
-				&&	c_textureCoords == t_vertex.c_textureCoords)
+				&&	c_textureCoords == t_vertex.c_textureCoords
+				&&  c_normal		== t_vertex.c_normal)
 			{
 				return true;
 			}
@@ -63,5 +77,6 @@ namespace Rol
 		glm::vec3 c_position;
 		glm::vec4 c_color;
 		glm::vec2 c_textureCoords;
+		glm::vec3 c_normal;
 	};
 }

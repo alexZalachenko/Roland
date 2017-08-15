@@ -1,17 +1,16 @@
 #include "Light.h"
 #include <iostream>
 
+
 Light::Light()
 	: IEntity(LightType), 
-	  c_intensity(0,0,0),
-	  c_isActive(false)
+	  c_color(1,1,1)
 {
 }
 
-Light::Light(Color p_color)
+Light::Light(glm::vec3 p_color)
 	: IEntity(LightType), 
-	  c_intensity(p_color),
-	  c_isActive(false)
+	  c_color(p_color)
 {
 }
 
@@ -19,14 +18,9 @@ Light::~Light()
 {
 }
 
-void Light::SeIntensity(Color p_color)
+glm::vec3 Light::GetColor()
 {
-	c_intensity = p_color;
-}
-
-Color Light::GetIntensity()
-{
-	return c_intensity;
+	return c_color;
 }
 
 void Light::BeginDraw()
@@ -39,18 +33,24 @@ void Light::EndDraw()
 	//TODO
 }
 
-bool Light::GetIsActive()
-{
-	return c_isActive;
-}
-
-void Light::SetIsActive(bool p_isActive)
-{
-	c_isActive = p_isActive;
-}
-
 void Light::DisplayEntityData(std::string p_tab)
 {
 	std::cout << p_tab << "Entity type: light	" << std::endl;
-	std::cout << p_tab << "Color (RGB): " << c_intensity.c_red << " " << c_intensity.c_green << " " << c_intensity.c_blue << std::endl;
+	std::cout << p_tab << "Color (RGB): " << c_color.r << " " << c_color.g << " " << c_color.b << std::endl << std::endl;
+}
+
+void Light::SetColor(glm::vec3 p_newColor)
+{
+	c_color.r = NormalizeValue(p_newColor.r);
+	c_color.g = NormalizeValue(p_newColor.g);
+	c_color.b = NormalizeValue(p_newColor.b);
+}
+
+float Light::NormalizeValue(float p_value)
+{
+	if (p_value < 0)
+		p_value = 0;
+	else if (p_value > 255)
+		p_value = 255;
+	return p_value;
 }

@@ -24,7 +24,7 @@ public:
 	Camera*			CreatePerspectiveCamera(float p_far, float p_near, float p_fov, float p_width, float p_height) override;
 	Camera*			CreateOrthographicCamera(float p_near, float p_far, float p_left, float p_right, float p_top, float p_bottom) override;
 	Light*			CreateLight() override;
-	Light*			CreateLight(Color p_intensity) override;
+	Light*			CreateLight(glm::vec3 p_intensity) override;
 	Mesh*			CreateMesh(std::string p_file) override;
 	Mesh*			CreateMesh(std::string p_meshFile, std::string p_textureFile) override;
 	void			DeleteMesh(std::string p_file) override;
@@ -43,7 +43,7 @@ private:
 	glm::mat4			c_projectionMatrix;
 	ModelMatrix			c_modelMatrix;
 	glm::mat4			c_viewMatrix;
-	GLuint				c_matrixLocation;
+	GLuint				c_viewMatrixLocation;
 
 	void	Init();
 	void	CreateWindow(Rol::WindowData p_windowData);

@@ -165,7 +165,7 @@ Light*			OpenGLEngine::CreateLight()
 }
 
 //user is responsible of freeing memory of the returned object
-Light *			OpenGLEngine::CreateLight(Color p_intensity)
+Light *			OpenGLEngine::CreateLight(glm::vec3 p_intensity)
 {
 	Light* t_newLight = new Light(p_intensity);
 	return t_newLight;
@@ -180,7 +180,7 @@ Mesh*			OpenGLEngine::CreateMesh(std::string p_file)
 		return nullptr;
 	}
 
-	Mesh* r_newMesh = new Mesh(&c_modelMatrix);
+	Mesh* r_newMesh = new Mesh(&c_modelMatrix, &c_shadersManager);
 	//get the resource from the resources manager
 	IResource* t_resource = c_resourcesManager.GetResource(p_file);
 	//set it to the new created mesh
@@ -232,7 +232,8 @@ void			OpenGLEngine::DeleteMesh(std::string p_file)
 
 void			OpenGLEngine::RegisterLightNode(Node* p_lightNode)
 {
-	if (p_lightNode != nullptr)
+	if (p_lightNode != nullptr && p_lightNode->GetIEntity() != nullptr && 
+		p_lightNode->GetIEntity()->GetEntityType() == LightType)
 		c_lights.push_back(p_lightNode);
 }
 
@@ -265,19 +266,30 @@ void			OpenGLEngine::DisplayScenetreeData()
 void			OpenGLEngine::CreateNewProgram(std::string p_vertexShader, std::string p_fragmentShader, std::string p_programName)
 {
 	GLuint t_newProgram = c_shadersManager.CreateProgram(p_vertexShader, p_fragmentShader, p_programName);
-	if (t_newProgram == -1)
+	if (t_newProgram == 0)
 	{
 		std::cout << "Failed to create shader program." << std::endl;
 		return;
 	}
 	c_shadersManager.UseProgram(t_newProgram);
+	
+	//set view matrix
+	c_viewMatrixLocation = glGetUniformLocation(c_shadersManager.GetActiveProgram(), "viewMatrix");
+	//set model matrix
 	c_modelMatrix.SetActiveProgram(t_newProgram);
-	c_matrixLocation = glGetUniformLocation(c_shadersManager.GetActiveProgram(), "viewMatrix");
-	c_modelMatrix.OnNewShaderProgram();
+	//set projection matrix
+	GLuint t_projectionMatrixLocation = glGetUniformLocation(c_shadersManager.GetActiveProgram(), "projectionMatrix");
+	if (c_activeCamera != nullptr)
+		glUniformMatrix4fv(t_projectionMatrixLocation, 1, GL_FALSE, glm::value_ptr(c_projectionMatrix));
+	else
+		glUniformMatrix4fv(t_projectionMatrixLocation, 1, GL_FALSE, glm::value_ptr(glm::mat4(1)));
 }
 
 void			OpenGLEngine::Draw()
 {
+	c_modelMatrix.Reset();
+
+	glm::mat4 t_viewAux;
 	//calculate viewMatrix
 	if (c_activeCamera != nullptr)
 	{
@@ -295,25 +307,54 @@ void			OpenGLEngine::Draw()
 		c_viewMatrix = ((Camera*)c_activeCamera->GetIEntity())->GetViewMatrix();
 		for (auto it =  t_transforms.rbegin(); it != t_transforms.rend(); it++)
 			c_viewMatrix *= (*it);
+		t_viewAux = c_viewMatrix;
 		c_viewMatrix = glm::inverse(c_viewMatrix);
 		
-		glUniformMatrix4fv(c_matrixLocation, 1, GL_FALSE, glm::value_ptr(c_viewMatrix));
+		glUniformMatrix4fv(c_viewMatrixLocation, 1, GL_FALSE, glm::value_ptr(c_viewMatrix));
 	}
 	else
-		glUniformMatrix4fv(c_matrixLocation, 1, GL_FALSE, glm::value_ptr(glm::mat4(1)));
+		glUniformMatrix4fv(c_viewMatrixLocation, 1, GL_FALSE, glm::value_ptr(glm::mat4(1)));
 
 	//render lights
+	Light* t_light;
+	glm::mat4 t_lightTransformations;
 	for (size_t t_index = 0; t_index < c_lights.size(); ++t_index)
 	{
-			/*recorrer el árbol a la inversa desde nodoLuz hasta la raiz
-			guardar el recorrido en una lista auxiliar de nodos de transformación
-			invertir la lista auxiliar
-			recorrer la lista auxiliar multiplicando las matrices en una matriz auxiliar
-			obtener la posición de la luz a partir de la matriz auxiliar
-			posicionar y activar la luz en la librería gráfica*/
+		std::vector<glm::mat4> t_transforms;
+		//get all the transforms from the camera to the root of the scene tree
+		Node* t_father = c_lights[t_index]->GetFather();
+		while (t_father != nullptr)
+		{
+			if (t_father->GetIEntity() != nullptr && t_father->GetIEntity()->GetEntityType() == TransformType)
+				t_transforms.push_back(((Transform*)t_father->GetIEntity())->GetMatrix());
+			t_father = t_father->GetFather();
+		}
+		//multiply all the transforms from the leaf to the root
+		//remember that last multiplication applied is the first. Last item in the vector is the first in the scene tree
+		for (auto it = t_transforms.rbegin(); it != t_transforms.rend(); it++)
+			t_lightTransformations *= (*it);
+
+		GLuint c_ambientLocation = glGetUniformLocation(c_shadersManager.GetActiveProgram(), "ambientLightColor");
+		glm::vec3 t_ambientColor(1, 0, 0);
+		glUniform3fv(c_ambientLocation, 1, glm::value_ptr(t_ambientColor));
+
+		GLuint c_ambientStrengthLocation = glGetUniformLocation(c_shadersManager.GetActiveProgram(), "ambientStrength");
+		float t_ambientStrength = 0.4f;
+		glUniform1f(c_ambientStrengthLocation, t_ambientStrength);
+
+		GLuint c_lightColorLocation = glGetUniformLocation(c_shadersManager.GetActiveProgram(), "lightColor");
+		t_light = (Light*)(c_lights[t_index]->GetIEntity());
+		glUniform3fv(c_lightColorLocation, 1, glm::value_ptr(t_light->GetColor()));
+
+		GLuint c_lightPositionLocation = glGetUniformLocation(c_shadersManager.GetActiveProgram(), "lightPosition");
+		glm::vec3 t_lightPosition = t_lightTransformations * glm::vec4(0, 0, 0, 1);
+		glUniform3fv(c_lightPositionLocation, 1, glm::value_ptr(t_lightPosition));
+
+		GLuint c_viewerPositionLocation = glGetUniformLocation(c_shadersManager.GetActiveProgram(), "viewerPosition");
+		glm::vec3 viewerPos = t_viewAux * glm::vec4(0, 0, 0, 1);
+		glUniform3fv(c_viewerPositionLocation, 1, glm::value_ptr(viewerPos));
 	}
 
-	c_modelMatrix.Reset();
 	c_rootNode.Draw();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

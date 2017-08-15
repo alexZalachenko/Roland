@@ -129,8 +129,11 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Assets\Shaders\FragmentShader.txt" />
+    <Text Include="Assets\Shaders\FragmentShaderAdvancedLightning.txt" />
     <Text Include="Assets\Shaders\FragmentShaderTextures.txt" />
+    <Text Include="Assets\Shaders\SimpleVertexShader.txt" />
     <Text Include="Assets\Shaders\VertexShader.txt" />
+    <Text Include="Assets\Shaders\VertexShaderAdvancedLightning.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
